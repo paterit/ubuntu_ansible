@@ -1,0 +1,30 @@
+- name: Install cheat on Ubuntu
+  hosts: localhost 
+  become: yes  # Run tasks as sudo
+
+  vars:
+    cheat_version: "4.4.0"
+    download_url: "https://github.com/cheat/cheat/releases/download/{{ cheat_version }}/cheat-linux-amd64.gz"
+    temp_file: "/tmp/cheat-linux-amd64.gz"
+    executable_file: "/tmp/cheat-linux-amd64"
+
+  tasks:
+    - name: Download cheat binary
+      get_url:
+        url: "{{ download_url }}"
+        dest: "{{ temp_file }}"
+
+    - name: Extract cheat binary
+      command:
+        cmd: "gunzip {{ temp_file }}"
+        creates: "{{ executable_file }}"
+
+    - name: Make cheat binary executable
+      file:
+        path: "{{ executable_file }}"
+        mode: '0755'
+
+    - name: Move cheat binary to /usr/local/bin
+      command:
+        cmd: "mv {{ executable_file }} /usr/local/bin/cheat"
+        removes: "{{ executable_file }}"

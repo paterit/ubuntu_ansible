@@ -1,0 +1,12 @@
+- name: Install ZSH and make it default shell on Ubuntu
+  hosts: localhost
+  become: yes  # Run tasks as sudo
+
+  vars:
+    ansible_user: ubuntu
+
+  tasks:
+    - name: Set ZSH as default shell for user
+      command:
+        cmd: "chsh -s /usr/bin/zsh" 
+
