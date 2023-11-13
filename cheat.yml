@@ -1,6 +1,6 @@
 - name: Install cheat on Ubuntu
-  hosts: localhost 
-  become: yes  # Run tasks as sudo
+  hosts: localhost
+  become: true # Run tasks as sudo
 
   vars:
     cheat_version: "4.4.0"
@@ -10,21 +10,22 @@
 
   tasks:
     - name: Download cheat binary
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ download_url }}"
         dest: "{{ temp_file }}"
+        mode: '0644'
 
     - name: Extract cheat binary
-      command:
+      ansible.builtin.command:
         cmd: "gunzip {{ temp_file }}"
         creates: "{{ executable_file }}"
 
     - name: Make cheat binary executable
-      file:
+      ansible.builtin.file:
         path: "{{ executable_file }}"
         mode: '0755'
 
     - name: Move cheat binary to /usr/local/bin
-      command:
+      ansible.builtin.command:
         cmd: "mv {{ executable_file }} /usr/local/bin/cheat"
         removes: "{{ executable_file }}"

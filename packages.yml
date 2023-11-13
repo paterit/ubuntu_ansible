@@ -1,14 +1,14 @@
 - name: Install additional packages on Ubuntu
-  hosts: localhost 
-  become: yes  # Run tasks as sudo
+  hosts: localhost
+  become: false # Run tasks as sudo
 
   tasks:
     - name: Update apt cache
-      apt:
-        update_cache: yes
+      ansible.builtin.apt:
+        update_cache: true
 
     - name: Install packages
-      apt:
+      ansible.builtin.apt:
         name:
           - git
           - geany
