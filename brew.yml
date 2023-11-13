@@ -1,0 +1,54 @@
+- name: Install brew on Ubuntu
+  hosts: localhost
+
+  vars:
+    linuxbrew_install_tmp: "/tmp/brewinstall"
+    linuxbrew_install_url: "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
+
+  tasks:
+    - name: Install dependecies
+      ansible.builtin.package:
+        name:
+          - build-essential
+          - curl
+          - git
+        state: present
+      become: true
+
+    - name: Check if brew is installed
+      ansible.builtin.command:
+        cmd: "brew --version"
+      register: brew_version_output
+      failed_when: false
+      changed_when: false
+      become: false
+
+    - name: Install brew
+      when: brew_version_output.rc != 0
+      block:
+
+        - name: Temporary directory
+          ansible.builtin.file:
+            path: "{{ linuxbrew_install_tmp }}"
+            state: directory
+            mode: "0700"
+          become: false
+
+        - name: Download Homebrew install script
+          ansible.builtin.get_url:
+            url: "{{ linuxbrew_install_url }}"
+            dest: "{{ linuxbrew_install_tmp }}/install.sh"
+            mode: "0700"
+          become: false
+
+        - name: Install Homebrew with the installer
+          ansible.builtin.command: sh -c "{{ linuxbrew_install_tmp }}/install.sh"
+          register: install_result
+          changed_when: "install_result.rc == 0"
+          become: false
+
+        - name: Remove temporary directory
+          ansible.builtin.file:
+            path: "{{ linuxbrew_install_tmp }}"
+            state: absent
+          become: false

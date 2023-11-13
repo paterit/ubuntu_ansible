@@ -1,0 +1,12 @@
+- name: ZSH config file
+  hosts: localhost
+
+  tasks:
+    - name: Copy zshrc file
+      ansible.builtin.copy:
+        src: "files/.zshrc"
+        dest: "~/"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: "0644"
+        force: false

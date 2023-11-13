@@ -9,23 +9,34 @@
     executable_file: "/tmp/cheat-linux-amd64"
 
   tasks:
-    - name: Download cheat binary
-      ansible.builtin.get_url:
-        url: "{{ download_url }}"
-        dest: "{{ temp_file }}"
-        mode: '0644'
-
-    - name: Extract cheat binary
+    - name: Check if cheat is already installed
       ansible.builtin.command:
-        cmd: "gunzip {{ temp_file }}"
-        creates: "{{ executable_file }}"
+        cmd: "cheat -v"
+      register: cheat_version_output
+      failed_when: false
+      changed_when: false
 
-    - name: Make cheat binary executable
-      ansible.builtin.file:
-        path: "{{ executable_file }}"
-        mode: '0755'
+    - name: Install cheat
+      when: cheat_version_output.rc != 0
+      block:
 
-    - name: Move cheat binary to /usr/local/bin
-      ansible.builtin.command:
-        cmd: "mv {{ executable_file }} /usr/local/bin/cheat"
-        removes: "{{ executable_file }}"
+        - name: Download cheat binary
+          ansible.builtin.get_url:
+            url: "{{ download_url }}"
+            dest: "{{ temp_file }}"
+            mode: '0644'
+
+        - name: Extract cheat binary
+          ansible.builtin.command:
+            cmd: "gunzip {{ temp_file }}"
+            creates: "{{ executable_file }}"
+
+        - name: Make cheat binary executable
+          ansible.builtin.file:
+            path: "{{ executable_file }}"
+            mode: '0755'
+
+        - name: Move cheat binary to /usr/local/bin
+          ansible.builtin.command:
+            cmd: "mv {{ executable_file }} /usr/local/bin/cheat"
+            removes: "{{ executable_file }}"

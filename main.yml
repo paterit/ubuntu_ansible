@@ -1,0 +1,14 @@
+- name: Set up local Ubuntu machine
+  hosts: localhost
+
+- name: Install oh-my-zsh
+  ansible.builtin.import_playbook: omzsh.yml
+
+- name: Install brew
+  ansible.builtin.import_playbook: brew.yml
+
+- name: Install dotfiles
+  ansible.builtin.import_playbook: dotfiles.yml
+
+- name: Install packages and applications
+  ansible.builtin.import_playbook: packages.yml

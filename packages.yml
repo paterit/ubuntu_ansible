@@ -1,6 +1,6 @@
 - name: Install additional packages on Ubuntu
   hosts: localhost
-  become: false # Run tasks as sudo
+  become: true # Run tasks as sudo
 
   tasks:
     - name: Update apt cache
@@ -12,4 +12,19 @@
         name:
           - git
           - geany
+          - git-gui
+          - vim
+          - meld
+          - htop
+          - keepass2
+          - python3-pip
+          - python3-venv
+          - rclone
+          - xclip
+          - p7zip-full
+          - ffmpeg
+          - tldr
+          - tmux
+          - simplescreenrecorder
+          - xournalpp
         state: present
