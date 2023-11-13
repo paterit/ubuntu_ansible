@@ -2,9 +2,18 @@
   hosts: localhost
 
   tasks:
-    - name: Copy zshrc file
+    - name: Copy zshrc file to home directory
       ansible.builtin.copy:
         src: "files/.zshrc"
+        dest: "~/"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: "0644"
+        force: false
+
+    - name: Copy tmux config file to home directory
+      ansible.builtin.copy:
+        src: "files/.tmux.conf"
         dest: "~/"
         owner: "{{ ansible_user_id }}"
         group: "{{ ansible_user_id }}"

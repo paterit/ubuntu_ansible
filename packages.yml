@@ -3,11 +3,8 @@
   become: true # Run tasks as sudo
 
   tasks:
-    - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: true
 
-    - name: Install packages
+    - name: Install apt packages
       ansible.builtin.apt:
         name:
           - git
@@ -28,3 +25,19 @@
           - simplescreenrecorder
           - xournalpp
         state: present
+        update_cache: true
+
+    - name: Install homebrew packages
+      become: false # Run tasks as normal user
+      block:
+        - name: Install fzf
+          community.general.homebrew:
+            name:
+              - fzf
+            state: present
+
+        - name: Install useful key bindings and fuzzy completion
+          ansible.builtin.command: /home/linuxbrew/.linuxbrew/opt/fzf/install -all
+          register: fzf_install
+          failed_when: fzf_install.rc != 0 and fzf_install.rc != 1
+          changed_when: false
