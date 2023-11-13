@@ -10,5 +10,8 @@
 - name: Install dotfiles
   ansible.builtin.import_playbook: dotfiles.yml
 
+- name: Install cheat
+  ansible.builtin.import_playbook: cheat.yml
+
 - name: Install packages and applications
   ansible.builtin.import_playbook: packages.yml
