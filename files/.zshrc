@@ -109,3 +109,11 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+lazygit () {
+	git add .
+	git commit -a -m "$1"
+	git push
+}
+
+alias tnw="tmux new-window -a -n $1"
