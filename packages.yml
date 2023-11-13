@@ -4,7 +4,7 @@
 
   tasks:
 
-    - name: Install apt packages
+    - name: Install standard apt packages
       ansible.builtin.apt:
         name:
           - git
@@ -16,6 +16,7 @@
           - keepass2
           - python3-pip
           - python3-venv
+          - python3-apt
           - rclone
           - xclip
           - p7zip-full
@@ -26,6 +27,16 @@
           - xournalpp
         state: present
         update_cache: true
+
+    - name: Install snap packages
+      become: true # Run tasks as normal user
+      community.general.snap:
+        name:
+          - multipass
+          - code
+          - spotify
+        state: present
+        classic: true
 
     - name: Install homebrew packages
       become: false # Run tasks as normal user
@@ -41,3 +52,16 @@
           register: fzf_install
           failed_when: fzf_install.rc != 0 and fzf_install.rc != 1
           changed_when: false
+
+    - name: Intall Alacritty
+      block:
+        - name: Add Alacritty repository
+          ansible.builtin.apt_repository:
+            repo: ppa:aslatter/ppa
+            state: present
+            update_cache: true
+
+        - name: Install Alacritty
+          ansible.builtin.apt:
+            name: alacritty
+            state: present
