@@ -15,3 +15,6 @@
 
 - name: Install packages and applications
   ansible.builtin.import_playbook: packages.yml
+
+- name: Install Java
+  ansible.builtin.import_playbook: java.yml

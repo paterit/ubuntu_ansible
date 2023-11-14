@@ -1,0 +1,27 @@
+- name: Install Java
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Add Open JDK repository
+      ansible.builtin.apt_repository:
+        repo: ppa:linuxuprising/java
+        state: present
+        update_cache: true
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - openjdk-17-jdk
+          - openjdk-17-jre
+          - openjdk-18-jdk
+          - gnupg2
+          - software-properties-common
+        state: present
+        update_cache: true
+
+    - name: Install Oracle Java
+      ansible.builtin.apt:
+        deb: https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.deb
+        state: present
+        update_cache: true
