@@ -5,7 +5,9 @@ Set up local (K)Ubuntu with Ansible.
 Before installing ansible, update and upgrade with reboot.
 
 ```bash
-sudo apt update && sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y && sudo reboot -f
+sudo apt update && \
+sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y && \
+sudo reboot -f
 ```
 
 ```bash
