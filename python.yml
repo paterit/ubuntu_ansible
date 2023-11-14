@@ -1,0 +1,58 @@
+- name: Install python environments and tools
+  hosts: localhost
+
+  tasks:
+    - name: Install pyenv
+      block:
+        - name: Install pyenv dependencies
+          become: true # Run tasks as root
+          ansible.builtin.apt:
+            name:
+              - build-essential
+              - zlib1g-dev
+              - libffi-dev
+              - libssl-dev
+              - libbz2-dev
+              - libreadline-dev
+              - libsqlite3-dev
+              - liblzma-dev
+              - tk-dev
+            state: present
+
+        - name: Install pyenv
+          become: false # Run tasks as normal user
+          community.general.homebrew:
+            name:
+              - pyenv
+              - pyenv-virtualenv
+            state: present
+
+        - name: Add pyenv to Zsh
+          ansible.builtin.blockinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            marker: "# {mark} PYENV ANSIBLE MANAGED BLOCK"
+            block: |
+              # Pyenv
+              export PYENV_ROOT="$HOME/.pyenv"
+              [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+              eval "$(pyenv init -)"
+              eval "$(pyenv virtualenv-init -)"
+
+    - name: Install pipx
+      block:
+        - name: Install pipx with homebrew
+          become: false # Run tasks as normal user
+
+          community.general.homebrew:
+            name: pipx
+            state: present
+
+        - name: Add pipx to Zsh
+          ansible.builtin.blockinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            marker: "# {mark} PIPX ANSIBLE MANAGED BLOCK"
+            block: |
+              export PATH="$HOME/.local/bin:$PATH"
+              autoload -Uz compinit
+              compinit
+              eval "$(register-python-argcomplete pipx)"

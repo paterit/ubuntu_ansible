@@ -117,3 +117,5 @@ lazygit () {
 }
 
 alias tnw="tmux new-window -a -n $1"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

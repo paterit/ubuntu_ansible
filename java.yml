@@ -1,6 +1,6 @@
 - name: Install Java
   hosts: localhost
-  become: yes
+  become: true
 
   tasks:
     - name: Add Open JDK repository
