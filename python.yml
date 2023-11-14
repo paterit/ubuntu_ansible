@@ -40,11 +40,12 @@
 
     - name: Install pipx
       block:
-        - name: Install pipx with homebrew
+        - name: Install pipx with pip
           become: false # Run tasks as normal user
 
-          community.general.homebrew:
+          ansible.builtin.pip:
             name: pipx
+            extra_args: --user
             state: present
 
         - name: Add pipx to Zsh
@@ -56,3 +57,8 @@
               autoload -Uz compinit
               compinit
               eval "$(register-python-argcomplete pipx)"
+
+    - name: Install poetry
+      community.general.pipx:
+        name: poetry
+        state: present
