@@ -1,14 +1,16 @@
-# ubuntu_ansible
+# Update new instance of ubuntu with Ansible
 
-Set up local (K)Ubuntu with Ansible.
+## Set up local (K)Ubuntu with Ansible
 
-Before installing ansible, update and upgrade with reboot.
+Before installing Ansible, update and upgrade with reboot.
 
 ```bash
 sudo apt update && \
 sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y && \
 sudo reboot -f
 ```
+
+Install Ansible, clone this repo and run Ansible playbooks.
 
 ```bash
 sudo apt update && \
@@ -18,4 +20,25 @@ sudo apt install -y ansible git && \
 git clone https://github.com/paterit/ubuntu_ansible.git && \
 cd ubuntu_ansible && \
 ansible-playbook main.yml
+```
+
+## Testing on multipass
+
+Full cycle:
+
+* delete and purge multipass instance
+* launch new instance
+* update
+* install ansible
+* mount this folder
+* play `main.yml` playbook
+
+```bash
+make full_test
+```
+
+Launch some playbook:
+
+```bash
+make test
 ```

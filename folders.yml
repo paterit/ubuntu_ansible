@@ -1,0 +1,9 @@
+- name: Create some folders
+  hosts: localhost
+
+  tasks:
+    - name: Create a '~/bin' folder
+      ansible.builtin.file:
+        path: "~/bin"
+        state: directory
+        mode: "0755"

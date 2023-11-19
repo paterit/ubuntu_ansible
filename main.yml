@@ -7,6 +7,9 @@
 - name: Install brew
   ansible.builtin.import_playbook: brew.yml
 
+- name: Install folders
+  ansible.builtin.import_playbook: folders.yml
+
 - name: Install dotfiles
   ansible.builtin.import_playbook: dotfiles.yml
 
