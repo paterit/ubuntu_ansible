@@ -22,4 +22,4 @@ full_test: clean new_instance install_ansible mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml
 
 test: mount
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- zsh -ic 'ansible-playbook main.yml'

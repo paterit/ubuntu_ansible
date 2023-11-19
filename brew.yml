@@ -15,7 +15,7 @@
         state: present
       become: true
 
-    - name: Check if brew is installed
+    - name: Check if brew is installed # noqa: command-instead-of-shell
       ansible.builtin.command:
         cmd: "brew --version"
       register: brew_version_output
