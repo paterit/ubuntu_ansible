@@ -7,3 +7,9 @@
         path: "~/bin"
         state: directory
         mode: "0755"
+
+    - name: Create rclone config folder
+      ansible.builtin.file:
+        path: "~/.config/rclone"
+        state: directory
+        mode: "0755"

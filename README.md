@@ -1,4 +1,4 @@
-# Update new instance of ubuntu with Ansible
+# Update new instance of Ubuntu with Ansible
 
 ## Set up local (K)Ubuntu with Ansible
 
@@ -20,6 +20,12 @@ sudo apt install -y ansible git && \
 git clone https://github.com/paterit/ubuntu_ansible.git && \
 cd ubuntu_ansible && \
 ansible-playbook main.yml
+```
+
+Then copy encrypted dot files to the `secrets` folder and run
+
+```bash
+ansible-playbook --ask-vault-pass secrets.yml
 ```
 
 ## Testing on multipass
