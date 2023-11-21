@@ -8,7 +8,13 @@
         state: present
       become: true
 
-    - name: Create knownhosts file
+    - name: Check if knownhosts file exists
+      ansible.builtin.stat:
+        path: ~/.ssh/known_hosts
+      register: knownhosts_file
+
+    - name: Create knownhosts file if it does not exist
+      when: not knownhosts_file.stat.exists
       ansible.builtin.file:
         path: ~/.ssh/known_hosts
         state: touch

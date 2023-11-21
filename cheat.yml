@@ -60,4 +60,3 @@
             path: ~/.config/cheat/conf.yml
             regexp: '^pager'
             line: 'pager: less -FRX'
-
