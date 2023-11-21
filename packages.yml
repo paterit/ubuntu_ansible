@@ -29,12 +29,13 @@
         update_cache: true
 
     - name: Install snap packages
-      become: true # Run tasks as normal user
+      become: true # Run tasks as sudo
       community.general.snap:
         name:
           - multipass
           - code
           - spotify
+          - firefox
         state: present
         classic: true
 

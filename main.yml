@@ -3,24 +3,40 @@
 
 - name: Install oh-my-zsh
   ansible.builtin.import_playbook: omzsh.yml
+  tags: fast
 
 - name: Install brew
   ansible.builtin.import_playbook: brew.yml
+  tags: slow
 
 - name: Install folders
   ansible.builtin.import_playbook: folders.yml
+  tags: fast
 
 - name: Install dotfiles
   ansible.builtin.import_playbook: dotfiles.yml
+  tags: fast
 
 - name: Install cheat
   ansible.builtin.import_playbook: cheat.yml
+  tags: fast
 
 - name: Install packages and applications
   ansible.builtin.import_playbook: packages.yml
+  tags: slow
+
+- name: Install Chrome
+  ansible.builtin.import_playbook: chrome.yml
+  tags: slow
 
 - name: Install Python
   ansible.builtin.import_playbook: python.yml
+  tags: slow
 
 - name: Install Java
   ansible.builtin.import_playbook: java.yml
+  tags: slow
+
+- name: Add known hosts
+  ansible.builtin.import_playbook: known_hosts.yml
+  tags: fast

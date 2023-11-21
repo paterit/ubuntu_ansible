@@ -1,0 +1,24 @@
+# ansible task for downloading and installing Chrome
+- name: Download and install Chrome
+  hosts: localhost
+
+  tasks:
+    - name: Download Chrome
+      ansible.builtin.get_url:
+        url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+        dest: "/tmp/google-chrome-stable_current_amd64.deb"
+        mode: "0644"
+        validate_certs: false
+        force: true
+      register: chrome_download
+      until: chrome_download is succeeded
+      retries: 5
+      delay: 5
+
+    - name: Install Chrome
+      become: true
+      ansible.builtin.apt:
+        deb: "/tmp/google-chrome-stable_current_amd64.deb"
+        state: present
+      register: chrome_install
+      until: chrome_install is succeeded

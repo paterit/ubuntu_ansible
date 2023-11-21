@@ -28,6 +28,12 @@ Then copy encrypted dot files to the `secrets` folder and run
 ansible-playbook --ask-vault-pass secrets.yml
 ```
 
+Install playbooks that require secrets:
+
+```bash
+ansible-playbook main-after-secrets.yml
+```
+
 ## Testing on multipass
 
 Full cycle:

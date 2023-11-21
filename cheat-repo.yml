@@ -1,0 +1,8 @@
+- name: Clone my cheat git repo
+  hosts: localhost
+
+  tasks:
+    - name: Clone my cheat git repo # noqa: latest
+      ansible.builtin.git:
+        repo: git@github.com-paterit:paterit/cheatsheets.git
+        dest: ~/.config/cheat/cheatsheets/personal

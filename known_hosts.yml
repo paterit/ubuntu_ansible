@@ -1,0 +1,34 @@
+- name: Add entries to knownhosts
+  hosts: localhost
+
+  tasks:
+    - name: Install dependecies
+      ansible.builtin.package:
+        name: jq
+        state: present
+      become: true
+
+    - name: Create knownhosts file
+      ansible.builtin.file:
+        path: ~/.ssh/known_hosts
+        state: touch
+        mode: '0644'
+
+    - name: Check if github.com is in knownhosts # noqa: command-instead-of-shell
+      ansible.builtin.shell:
+        cmd: ssh-keygen -F github.com
+      register: github_knownhosts
+      failed_when: false
+      changed_when: false
+
+    - name: Add github.com to knownhosts
+      when: github_knownhosts.rc != 0
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          curl --silent https://api.github.com/meta \
+            | jq --raw-output '"github.com "+.ssh_keys[]' >> ~/.ssh/known_hosts
+        executable: /bin/zsh
+      register: github_knownhosts_status
+      failed_when: github_knownhosts_status.rc != 0
+      changed_when: false

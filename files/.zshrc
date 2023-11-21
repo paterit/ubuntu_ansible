@@ -116,6 +116,11 @@ lazygit () {
 	git push
 }
 
+mkcd () {
+	mkdir -p -- "$1" &&
+	cd -P -- "$1"
+}
+
 alias tnw="tmux new-window -a -n $1"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
