@@ -22,7 +22,13 @@ cd ubuntu_ansible && \
 ansible-playbook main.yml
 ```
 
-Then copy encrypted dot files to the `secrets` folder and run
+Load ZSH.
+
+```bash
+. ~/.zshrc
+```
+
+Then copy encrypted dotfiles to the `secrets` folder and run
 
 ```bash
 ansible-playbook --ask-vault-pass secrets.yml
@@ -44,6 +50,8 @@ Full cycle:
 * install ansible
 * mount this folder
 * play `main.yml` playbook
+* add secrets
+* play `main-after-secrets.yml` playbook
 
 ```bash
 make full_test
