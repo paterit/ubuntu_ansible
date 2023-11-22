@@ -31,6 +31,9 @@ test: mount
 fast_test_no_secrets: clean new_instance install_ansible mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags fast
 
+minimal_test_no_secrets: clean new_instance install_ansible mount
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags minimal
+
 fast_test: fast_test_no_secrets
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook --ask-vault-pass secrets.yml
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main-after-secrets.yml

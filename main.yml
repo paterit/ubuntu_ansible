@@ -11,11 +11,11 @@
 
 - name: Install folders
   ansible.builtin.import_playbook: folders.yml
-  tags: fast
+  tags: fast, minimal
 
 - name: Install dotfiles
   ansible.builtin.import_playbook: dotfiles.yml
-  tags: fast
+  tags: fast, minimal
 
 - name: Install cheat
   ansible.builtin.import_playbook: cheat.yml
@@ -40,3 +40,7 @@
 - name: Add known hosts
   ansible.builtin.import_playbook: known_hosts.yml
   tags: fast
+
+- name: Install Docker
+  ansible.builtin.import_playbook: docker.yml
+  tags: slow
