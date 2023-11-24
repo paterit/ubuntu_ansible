@@ -34,7 +34,7 @@
           set -o pipefail
           curl --silent https://api.github.com/meta \
             | jq --raw-output '"github.com "+.ssh_keys[]' >> ~/.ssh/known_hosts
-        executable: /bin/zsh
+        executable: /bin/bash
       register: github_knownhosts_status
       failed_when: github_knownhosts_status.rc != 0
       changed_when: false
