@@ -39,7 +39,7 @@
 
 - name: Add known hosts
   ansible.builtin.import_playbook: known_hosts.yml
-  tags: fast
+  tags: fast, minimal
 
 - name: Install Docker
   ansible.builtin.import_playbook: docker.yml

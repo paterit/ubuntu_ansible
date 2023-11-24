@@ -1,3 +1,5 @@
+.PHONY: help mount new_instance install_ansible clean secrets full_test_no_secrets full_test fast_test_no_secrets fast_test minimal_test_no_secrets minimal_test test
+
 mount:
 	-@multipass mount . ltsAnsible:/home/ubuntu/ubuntu_ansible
 	
@@ -18,22 +20,24 @@ clean:
 	- multipass delete ltsAnsible
 	multipass purge
 
+secrets:
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook --vault-password-file ./secrets/.pass.txt secrets.yml
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main-after-secrets.yml
+
 full_test_no_secrets: clean new_instance install_ansible mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml
 	
-full_test: full_test_no_secrets
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook --ask-vault-pass secrets.yml
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main-after-secrets.yml
-
-test: mount
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- zsh -ic 'ansible-playbook main.yml'
+full_test: full_test_no_secrets secrets
 
 fast_test_no_secrets: clean new_instance install_ansible mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags fast
 
+fast_test: fast_test_no_secrets secrets
+
 minimal_test_no_secrets: clean new_instance install_ansible mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags minimal
 
-fast_test: fast_test_no_secrets
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook --ask-vault-pass secrets.yml
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main-after-secrets.yml
+minimal_test: minimal_test_no_secrets secrets
+
+test: mount
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- zsh -ic 'ansible-playbook main.yml'
