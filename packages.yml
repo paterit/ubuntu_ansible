@@ -4,6 +4,11 @@
 
   tasks:
 
+    - name: Repo for Keepass2
+      ansible.builtin.apt_repository:
+        repo: ppa:ubuntuhandbook1/keepass2
+        state: present
+
     - name: Install standard apt packages
       ansible.builtin.apt:
         name:
