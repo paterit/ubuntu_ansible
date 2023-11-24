@@ -19,7 +19,7 @@
               - tk-dev
             state: present
 
-        - name: Install pyenv
+        - name: Install pyenv with homebrew
           become: false # Run tasks as normal user
           community.general.homebrew:
             name:
