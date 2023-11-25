@@ -17,6 +17,10 @@
               - libsqlite3-dev
               - liblzma-dev
               - tk-dev
+              - python3-pip
+              - python3-venv
+              - python3-dev
+              - python3-apt
             state: present
 
         - name: Install pyenv with homebrew
@@ -58,7 +62,33 @@
               compinit
               eval "$(register-python-argcomplete pipx)"
 
-    - name: Install poetry
-      community.general.pipx:
-        name: poetry
-        state: present
+    - name: Poetry
+      block:
+        - name: Install poetry dependencies
+          become: true # Run tasks as root
+          ansible.builtin.apt:
+            name:
+              - curl
+              - python3-distutils
+            state: present
+
+        - name: Install poetry with pipx
+          become: false # Run tasks as normal user
+          community.general.pipx:
+            name: poetry
+            state: present
+
+        - name: Add poetry to Zsh
+          ansible.builtin.blockinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            marker: "# {mark} POETRY ANSIBLE MANAGED BLOCK"
+            block: |
+              eval "$(poetry completions zsh)"
+
+        - name: Poetry will create venv in project folder
+          ansible.builtin.shell:
+            cmd: poetry config virtualenvs.in-project true
+            creates: "{{ ansible_env.HOME }}/.config/pypoetry/config.toml"
+            executable: /bin/zsh
+
+
