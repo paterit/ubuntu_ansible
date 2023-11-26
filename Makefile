@@ -1,4 +1,6 @@
-.PHONY: help mount new_instance install_ansible clean secrets full_test_no_secrets full_test fast_test_no_secrets fast_test minimal_test_no_secrets minimal_test test
+.PHONY: help mount new_instance install_ansible clean secrets full_test_no_secrets 
+.PHONY: full_test fast_test_no_secrets fast_test minimal_test_no_secrets minimal_test test clean_install_ansible
+
 
 mount:
 	-@multipass mount . ltsAnsible:/home/ubuntu/ubuntu_ansible
@@ -24,12 +26,17 @@ secrets:
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook --vault-password-file ./secrets/.pass.txt secrets.yml
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main-after-secrets.yml
 
-full_test_no_secrets: clean new_instance install_ansible mount
+clean_install_ansible: clean new_instance install_ansible
+
+mount_and_main: mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml
+
+full_test_no_secrets: clean_install_ansible mount_and_main
 	
 full_test: full_test_no_secrets secrets
+	@multipass restart ltsAnsible
 
-fast_test_no_secrets: clean new_instance install_ansible mount
+fast_test_no_secrets: clean_install_ansible mount
 	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags fast
 
 fast_test: fast_test_no_secrets secrets
@@ -40,4 +47,4 @@ minimal_test_no_secrets: clean new_instance install_ansible mount
 minimal_test: minimal_test_no_secrets secrets
 
 test: mount
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- zsh -ic 'ansible-playbook main.yml'
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook python.yml
