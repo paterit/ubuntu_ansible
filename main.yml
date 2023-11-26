@@ -44,3 +44,7 @@
 - name: Install Docker
   ansible.builtin.import_playbook: docker.yml
   tags: slow
+
+- name: Install k8s tools
+  ansible.builtin.import_playbook: k8s.yml
+  tags: slow
