@@ -1,0 +1,41 @@
+- name: Install k8s related packages
+  hosts: localhost
+  become: false
+
+  tasks:
+    - name: Install podman
+      ansible.builtin.apt:
+        name: podman
+        state: present
+      become: true
+
+    - name: Check if minikube is installed
+      ansible.builtin.command:
+        cmd: minikube version
+      register: minikube_installed
+      failed_when: false
+      changed_when: false
+
+    - name: Install minikube
+      when: minikube_installed.rc != 0
+      ansible.builtin.apt:
+        deb: https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+        state: present
+        update_cache: true
+      become: true
+
+    - name: Install kubectl
+      block:
+        - name: Install kubectl
+          community.general.snap:
+            name: kubectl
+            channel: latest/stable
+            classic: true
+            state: present
+          become: true
+
+        - name: Add kubectl auto-completion to zsh
+          ansible.builtin.lineinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            line: "source <(kubectl completion zsh)"
+            state: present
