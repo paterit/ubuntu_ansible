@@ -71,6 +71,7 @@ ZSH_THEME_RANDOM_CANDIDATES=( awesomepanda pygmalion strug)
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+	poetry
 	git 
 	zsh-autosuggestions
 	zsh-syntax-highlighting

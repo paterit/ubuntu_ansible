@@ -73,22 +73,24 @@
             state: present
 
         - name: Install poetry with pipx
-          become: false # Run tasks as normal user
           community.general.pipx:
             name: poetry
             state: present
 
-        - name: Add poetry to Zsh
-          ansible.builtin.blockinfile:
-            path: "{{ ansible_env.HOME }}/.zshrc"
-            marker: "# {mark} POETRY ANSIBLE MANAGED BLOCK"
-            block: |
-              eval "$(poetry completions zsh)"
+        - name: Create zsh plugin folder for poetry
+          ansible.builtin.shell:
+            cmd: "mkdir -p {{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry"
+            executable: /bin/zsh
+            creates: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry"
+
+        - name: Generate poetry autocomplete
+          ansible.builtin.shell:
+            cmd: "~/.local/bin/poetry completions zsh > {{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry/_poetry"
+            executable: /bin/zsh
+            creates: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry/_poetry"
 
         - name: Poetry will create venv in project folder
           ansible.builtin.shell:
-            cmd: poetry config virtualenvs.in-project true
+            cmd: ~/.local/bin/poetry config virtualenvs.in-project true
             creates: "{{ ansible_env.HOME }}/.config/pypoetry/config.toml"
             executable: /bin/zsh
-
-
