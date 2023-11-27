@@ -151,13 +151,6 @@
             cmd: cpan App::cpanminus
             creates: ~/perl5/bin/cpanm
 
-        - name: Install cpanm modules
-          community.general.cpanm:
-            name: Neovim::Ext
-            notest: true
-            mode: new
-            executable: ~/perl5/bin/cpanm
-
         - name: Add cpanm to zsh
           ansible.builtin.blockinfile:
             path: ~/.zshrc
@@ -170,6 +163,14 @@
               esac
             state: present
 
+        - name: Install neovim cpnam module
+          ansible.builtin.command:
+            cmd: |
+              . ~/.zshrc && cpanm Neovim::Ext
+            executable: /bin/zsh
+          changed_when: false
+          failed_when: false
+
     - name: Install Rubby for NeoVim
       block:
         - name: Install rubby from apt
@@ -179,10 +180,44 @@
               - ruby-full
             state: present
 
+        - name: Check if neovim gem is installed
+          become: true
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              gem list | grep neovim
+            executable: /bin/zsh
+          register: neovim_gem_installed
+          changed_when: false
+          failed_when: false
+
         - name: Install neovim gem
-          community.general.gem:
-            name: neovim
-            state: present
+          when: neovim_gem_installed.stdout == ""
+          become: true
+          ansible.builtin.shell:
+            cmd: "sudo gem install neovim"
+            executable: /bin/zsh
+          changed_when: false
+          failed_when: false
+
+    - name: Check if neovim for node is installed
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          npm list -g --depth=0 | grep neovim
+        executable: /bin/zsh
+      register: neovim_node_installed
+      changed_when: false
+      failed_when: false
+
+    - name: Install NodeJS for NeoVim
+      when: neovim_node_installed.stdout == ""
+      ansible.builtin.shell:
+        cmd: |
+          . ~/.zshrc && npm install -g neovim
+        executable: /bin/zsh
+      changed_when: false
+      failed_when: false
 
     - name: Install gdu
       become: true
