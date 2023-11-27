@@ -48,3 +48,7 @@
 - name: Install k8s tools
   ansible.builtin.import_playbook: k8s.yml
   tags: slow
+
+- name: Install javascript tools
+  ansible.builtin.import_playbook: javascript.yml
+  tags: slow

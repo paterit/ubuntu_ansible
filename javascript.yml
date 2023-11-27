@@ -1,0 +1,34 @@
+- name: Install javascript tooling
+  hosts: localhost
+
+  tasks:
+    - name: Install nvm
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+        executable: /bin/bash
+
+    - name: Check if node is installed
+      ansible.builtin.shell:
+        cmd: |
+          source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+          node --version
+        executable: /bin/bash
+      register: node_installed
+      failed_when: false
+      changed_when: false
+
+    - name: Install node
+      when: node_installed.rc != 0
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+          nvm install node
+          nvm install --lts
+        executable: /bin/bash
+      register: node_status
+      failed_when: node_status.rc != 0
+      changed_when: node_status.rc == 0
