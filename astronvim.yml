@@ -34,3 +34,50 @@
           changed_when: false
           failed_when: false
 
+    - name: Check if NeoVim is installed
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          ~/apps/nvim/nvim.appimage --version
+        executable: /bin/bash
+      register: nvim_installed
+      changed_when: false
+      failed_when: false
+
+    - name: Install NeoVim as appimage
+      when: nvim_installed.rc != 0
+      block:
+
+        - name: Enable universe repository
+          become: true
+          ansible.builtin.apt_repository:
+            repo: "{{ item }}"
+            update_cache: yes
+          loop:
+            - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
+            - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-updates universe"
+            - "deb http://security.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-security universe"
+
+        - name: Install libfuse2 # don't install fuse on >= 22.04
+          become: true
+          ansible.builtin.apt:
+            name: libfuse2
+            state: present
+
+        - name: Create ~/apps/nvim
+          ansible.builtin.file:
+            path: ~/apps/nvim
+            state: directory
+            mode: "0755"
+
+        - name: Download NeoVim appimage
+          ansible.builtin.get_url:
+            url: https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+            dest: ~/apps/nvim/nvim.appimage
+            mode: "0764"
+          
+        - name: Add nvim alias
+          ansible.builtin.lineinfile:
+            path: ~/.zshrc
+            line: "alias nvim='~/apps/nvim/nvim.appimage'"
+            state: present
