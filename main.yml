@@ -53,6 +53,10 @@
   ansible.builtin.import_playbook: javascript.yml
   tags: slow
 
+- name: Install Rust
+  ansible.builtin.import_playbook: rust.yml
+  tags: slow
+
 - name: Install AstroNVim
   ansible.builtin.import_playbook: astronvim.yml
   tags: slow

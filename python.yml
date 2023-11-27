@@ -42,6 +42,23 @@
               eval "$(pyenv init -)"
               eval "$(pyenv virtualenv-init -)"
 
+        - name: Install last stable versions of python under pyenv
+          ansible.builtin.shell:
+            cmd: ". ~/.zshrc && pyenv install -s {{ item }}"
+            executable: /bin/zsh
+            creates: "~/.pyenv/versions/{{ item }}"
+          loop:
+            - "3.10.13"
+            - "3.11.6"
+
+        - name: Install 3.12 version of python under pyenv # https://github.com/pyenv/pyenv/issues/2823
+          ansible.builtin.shell:
+            cmd: |
+              brew unlink pkg-config
+              . ~/.zshrc && pyenv install -s 3.12.0
+            executable: /bin/zsh
+            creates: "~/.pyenv/versions/3.12.0"
+
     - name: Install pipx
       block:
         - name: Install pipx with pip

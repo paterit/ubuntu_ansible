@@ -111,7 +111,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-lazygit () {
+lgit () {
 	git add .
 	git commit -a -m "$1"
 	git push

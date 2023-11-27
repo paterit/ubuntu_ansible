@@ -52,7 +52,7 @@
           become: true
           ansible.builtin.apt_repository:
             repo: "{{ item }}"
-            update_cache: yes
+            update_cache: true
           loop:
             - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
             - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-updates universe"
@@ -75,9 +75,131 @@
             url: https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
             dest: ~/apps/nvim/nvim.appimage
             mode: "0764"
-          
+
         - name: Add nvim alias
           ansible.builtin.lineinfile:
             path: ~/.zshrc
             line: "alias nvim='~/apps/nvim/nvim.appimage'"
             state: present
+
+
+    - name: Install treesitter
+      block:
+        - name: Install apt packages
+          become: true
+          ansible.builtin.apt:
+            name:
+              - ripgrep
+            state: present
+
+        - name: Install cargo packages
+          community.general.cargo:
+            name:
+              - watchexec-cli
+              - tree-sitter-cli
+            locked: true
+            state: present
+
+        - name: Install lazygit
+          ansible.builtin.shell:
+            cmd: |
+              set -o pipefail
+              LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+              curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+              tar xf lazygit.tar.gz lazygit
+              sudo install lazygit /usr/local/bin
+            executable: /bin/bash
+            chdir: /tmp
+            creates: /usr/local/bin/lazygit
+
+    - name: Clone my AstroNVim config
+      block:
+        - name: Clone AstroNVim # noqa: latest
+          ansible.builtin.git:
+            repo: https://github.com/AstroNvim/AstroNvim
+            dest: ~/.config/nvim
+            depth: 1
+            update: false
+
+        - name: Clone my AstroNVim config # noqa: latest
+          ansible.builtin.git:
+            repo: https://github.com/paterit/astronvim-config.git
+            dest: ~/.config/nvim/lua/user
+
+
+    - name: Install python for NeoVim
+      block:
+        - name: Install pyenv version for NeoVim
+          ansible.builtin.shell:
+            cmd: |
+              . ~/.zshrc && pyenv virtualenv 3.11 py3nvim
+              . ~/.pyenv/versions/py3nvim/bin/activate && python3 -m pip install pynvim
+            executable: /bin/zsh
+            creates: ~/.pyenv/versions/py3nvim
+
+        - name: Add py3nvim to neovim config
+          ansible.builtin.lineinfile:
+            path: ~/.config/nvim/init.lua
+            line: "vim.g.python3_host_prog = '/home/{{ ansible_user_id }}/.pyenv/versions/py3nvim/bin/python3'"
+            state: present
+
+
+    - name: Install Perl for NeoVim
+      block:
+        - name: Install cpan App::cpanminus
+          ansible.builtin.command:
+            cmd: cpan App::cpanminus
+            creates: ~/perl5/bin/cpanm
+
+        - name: Install cpanm modules
+          community.general.cpanm:
+            name: Neovim::Ext
+            notest: true
+            mode: new
+            executable: ~/perl5/bin/cpanm
+
+        - name: Add cpanm to zsh
+          ansible.builtin.blockinfile:
+            path: ~/.zshrc
+            marker: "# {mark} CPANM ANSIBLE MANAGED BLOCK"
+            block: |
+              export PNPM_HOME="/home/wsemik/.local/share/pnpm"
+              case ":$PATH:" in
+                *":$PNPM_HOME:"*) ;;
+                *) export PATH="$PNPM_HOME:$PATH" ;;
+              esac
+            state: present
+
+    - name: Install Rubby for NeoVim
+      block:
+        - name: Install rubby from apt
+          become: true
+          ansible.builtin.apt:
+            name:
+              - ruby-full
+            state: present
+
+        - name: Install neovim gem
+          community.general.gem:
+            name: neovim
+            state: present
+
+    - name: Install gdu
+      become: true
+      block:
+        - name: Add ppa for gdu
+          ansible.builtin.apt_repository:
+            repo: ppa:daniel-milde/gdu
+            update_cache: true
+
+        - name: Install gdu
+          ansible.builtin.apt:
+            name:
+              - gdu
+            state: present
+
+    - name: Install bottom
+      become: true
+      ansible.builtin.apt:
+        deb: https://github.com/ClementTsang/bottom/releases/download/0.9.6/bottom_0.9.6_amd64.deb
+        state: present

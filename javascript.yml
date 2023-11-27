@@ -32,3 +32,14 @@
       register: node_status
       failed_when: node_status.rc != 0
       changed_when: node_status.rc == 0
+
+    - name: Add paths to Zsh
+      ansible.builtin.blockinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        marker: "# {mark} NVM ANSIBLE MANAGED BLOCK"
+        block: |
+          # NVM
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+        state: present

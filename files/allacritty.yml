@@ -1,0 +1,21 @@
+# fullcolor
+env:
+  TERM: xterm-256color
+
+# maximized
+window:
+  decorations: none
+  startup_mode: Maximized
+
+font:
+  # Point size
+  size: 10.0
+  normal:
+    family: Inconsolata Nerd Font
+    style: Regular
+  bold:
+    family: Inconsolata Nerd Font
+    style: Bold
+  italic:
+    family: Inconsolata Nerd Font
+    style: Italic

@@ -6,7 +6,7 @@ mount:
 	-@multipass mount . ltsAnsible:/home/ubuntu/ubuntu_ansible
 	
 new_instance:
-	@multipass launch -n ltsAnsible -c 2 -m 4G -d 15G
+	@multipass launch -n ltsAnsible -c 2 -m 4G -d 30G
 	@multipass exec ltsAnsible -- sudo apt update
 	@multipass exec ltsAnsible -- sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y
 	@multipass restart ltsAnsible
@@ -47,4 +47,4 @@ minimal_test_no_secrets: clean new_instance install_ansible mount
 minimal_test: minimal_test_no_secrets secrets
 
 test: mount
-	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook python.yml
+	@multipass exec ltsAnsible --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook astronvim.yml
