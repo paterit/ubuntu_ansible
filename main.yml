@@ -52,3 +52,7 @@
 - name: Install javascript tools
   ansible.builtin.import_playbook: javascript.yml
   tags: slow
+
+- name: Install AstroNVim
+  ansible.builtin.import_playbook: astronvim.yml
+  tags: slow
