@@ -6,7 +6,7 @@ mount:
 	-@multipass mount . ltsAnsible:/home/ubuntu/ubuntu_ansible
 	
 new_instance:
-	@multipass launch -n ltsAnsible -c 2 -m 4G -d 10G
+	@multipass launch -n ltsAnsible -c 2 -m 4G -d 15G
 	@multipass exec ltsAnsible -- sudo apt update
 	@multipass exec ltsAnsible -- sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y
 	@multipass restart ltsAnsible
