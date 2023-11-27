@@ -1,4 +1,4 @@
-- name: Install OMZSH and make it default shell on Ubuntu
+- name: Install Oh My ZSH and make it default shell on Ubuntu
   hosts: localhost
 
   tasks:
