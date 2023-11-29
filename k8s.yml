@@ -18,11 +18,20 @@
 
     - name: Install minikube
       when: minikube_installed.rc != 0
-      ansible.builtin.apt:
-        deb: https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
-        state: present
-        update_cache: true
-      become: true
+      block:
+
+        - name: Install minikube
+          ansible.builtin.apt:
+            deb: https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+            state: present
+            update_cache: true
+          become: true
+
+        - name: Add minikube completion to zsh
+          ansible.builtin.lineinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            line: "source <(minikube completion zsh)"
+            state: present
 
     - name: Install kubectl
       block:
