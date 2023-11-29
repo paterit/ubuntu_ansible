@@ -99,6 +99,7 @@
               - tree-sitter-cli
             locked: true
             state: present
+            executable: ~/.cargo/bin/cargo
 
         - name: Install lazygit
           ansible.builtin.shell:
@@ -147,6 +148,7 @@
     - name: Install Perl for NeoVim
       block:
         - name: Install cpan App::cpanminus
+          become: true
           ansible.builtin.command:
             cmd: cpan App::cpanminus
             creates: ~/perl5/bin/cpanm
@@ -163,8 +165,9 @@
               esac
             state: present
 
-        - name: Install neovim cpnam module
-          ansible.builtin.command:
+        - name: Install neovim cpanm module
+          become: true
+          ansible.builtin.shell:
             cmd: |
               . ~/.zshrc && cpanm Neovim::Ext
             executable: /bin/zsh
