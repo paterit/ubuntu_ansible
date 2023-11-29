@@ -149,9 +149,10 @@
       block:
         - name: Install cpan App::cpanminus
           become: true
-          ansible.builtin.command:
-            cmd: cpan App::cpanminus
+          ansible.builtin.shell:
+            cmd: PERL_MM_USE_DEFAULT=1 cpan App::cpanminus
             creates: ~/perl5/bin/cpanm
+            executable: /bin/bash
 
         - name: Add cpanm to zsh
           ansible.builtin.blockinfile:
@@ -169,7 +170,7 @@
           become: true
           ansible.builtin.shell:
             cmd: |
-              . ~/.zshrc && cpanm Neovim::Ext
+              . ~/.zshrc && cpanm -n Neovim::Ext
             executable: /bin/zsh
           changed_when: false
           failed_when: false
