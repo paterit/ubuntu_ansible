@@ -2,39 +2,34 @@
 
 ## Set up local (K)Ubuntu with Ansible
 
-Before installing Ansible, update and upgrade with reboot.
+Update and upgrade the host then install Ansible and git with reboot at the end.
 
 ```bash
 sudo apt update && \
 sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y && \
+sudo add-apt-repository --yes --update ppa:ansible/ansible && \
+sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a \
+apt install -y ansible git software-properties-common && \
 sudo reboot -f
 ```
 
-Install Ansible, clone this repo and run Ansible playbooks.
+Clone this repo and run Ansible playbooks. You will be prompted for your password to run `sudo` tasks.
 
 ```bash
-sudo apt update && \
-sudo apt install -y software-properties-common && \
-sudo add-apt-repository --yes --update ppa:ansible/ansible && \
-sudo apt install -y ansible git && \
 git clone https://github.com/paterit/ubuntu_ansible.git && \
 cd ubuntu_ansible && \
 ansible-playbook -K main.yml
 ```
 
-Load ZSH:
+Log out and log in again to apply changes.
 
-```bash
-. ~/.zshrc
-```
-
-Then copy encrypted dotfiles to the `secrets` folder (mind folder structure) and run:
+Then register your SSH keys by copying my encrypted dotfiles as a zipped private repo (`dotfiles-main.zip`) from GitHub, running the `secrets.yml` playbook and inputting a password (eg. stored in the password manager) when prompted.
 
 ```bash
 ansible-playbook --ask-vault-pass secrets.yml
 ```
 
-Install playbooks that require secrets:
+Once you have access to your private repos, you can run the  `main-after-secrets.yml` playbook:
 
 ```bash
 ansible-playbook main-after-secrets.yml
