@@ -23,7 +23,7 @@ ansible-playbook -K main.yml
 
 Log out and log in again to apply changes.
 
-Then register your SSH keys by copying my encrypted dotfiles as a zipped private repo (`dotfiles-main.zip`) from GitHub, running the `secrets.yml` playbook and inputting a password (eg. stored in the password manager) when prompted.
+Then register your SSH keys by copying encrypted dotfiles as a zipped private repo (`dotfiles-main.zip`) from GitHub, running the `secrets.yml` playbook and inputting a password (eg. stored in the password manager) when prompted.
 
 ```bash
 ansible-playbook --ask-vault-pass secrets.yml
