@@ -44,6 +44,12 @@
         state: present
         classic: true
 
+    - name: Update firefox to latest version # above snap install will not update to latest version if already installed
+      become: true # Run tasks as sudo
+      ansible.builtin.command: snap refresh firefox
+      changed_when: false
+
+
     - name: Install homebrew packages
       become: false # Run tasks as normal user
       block:
