@@ -31,6 +31,7 @@
           - simplescreenrecorder
           - xournalpp
         state: present
+        autoremove: true
         update_cache: true
 
     - name: Install snap packages
@@ -45,9 +46,16 @@
         classic: true
 
     - name: Update firefox to latest version # above snap install will not update to latest version if already installed
-      become: true # Run tasks as sudo
-      ansible.builtin.command: snap refresh firefox
-      changed_when: false
+      block:
+        - name: Kill running firefox processes
+          become: true # Run tasks as sudo
+          ansible.builtin.command: pkill firefox
+          changed_when: false
+
+        - name: Update firefox package
+          become: true # Run tasks as sudo
+          ansible.builtin.command: snap refresh firefox
+          changed_when: false
 
 
     - name: Install homebrew packages
