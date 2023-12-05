@@ -3,11 +3,11 @@
 
 - name: Install oh-my-zsh
   ansible.builtin.import_playbook: omzsh.yml
-  tags: fast
+  tags: fast, minimal
 
 - name: Install brew
   ansible.builtin.import_playbook: brew.yml
-  tags: slow
+  tags: slow, minimal
 
 - name: Install folders
   ansible.builtin.import_playbook: folders.yml
@@ -19,11 +19,11 @@
 
 - name: Install cheat
   ansible.builtin.import_playbook: cheat.yml
-  tags: fast
+  tags: fast, minimal
 
 - name: Install packages and applications
   ansible.builtin.import_playbook: packages.yml
-  tags: slow
+  tags: slow, minimal
 
 - name: Install Chrome
   ansible.builtin.import_playbook: chrome.yml
