@@ -66,6 +66,7 @@
           community.general.homebrew:
             name:
               - fzf
+              - ripgrep
             state: present
 
         - name: Install useful key bindings and fuzzy completion
