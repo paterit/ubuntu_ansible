@@ -1,0 +1,25 @@
+- name: ZSH config file
+  hosts: localhost
+
+  vars:
+    files:
+      - src: "files/.zshrc"
+        dest: "~/"
+      - src: "files/.tmux.conf"
+        dest: "~/"
+      - src: "files/config/allacritty.yml"
+        dest: "~/.config/allacritty/"
+      - src: "files/local/share/konsole/WS.profile"
+        dest: "~/.local/share/konsole/"
+
+  tasks:
+
+    - name: Copy files
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: "0644"
+        force: false
+      loop: "{{ files }}"

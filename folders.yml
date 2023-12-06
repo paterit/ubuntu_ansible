@@ -1,15 +1,15 @@
 - name: Create some folders
   hosts: localhost
 
-  tasks:
-    - name: Create a '~/bin' folder
-      ansible.builtin.file:
-        path: "~/bin"
-        state: directory
-        mode: "0755"
+  vars:
+    folders:
+      - "~/bin"
+      - "~/apps"
 
-    - name: Create apps config folder
+  tasks:
+    - name: Create folders
       ansible.builtin.file:
-        path: "~/apps"
+        path: "{{ item }}"
         state: directory
         mode: "0755"
+      loop: "{{ folders }}"

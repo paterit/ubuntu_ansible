@@ -13,8 +13,8 @@
   ansible.builtin.import_playbook: folders.yml
   tags: fast, minimal
 
-- name: Install dotfiles
-  ansible.builtin.import_playbook: dotfiles.yml
+- name: Install files
+  ansible.builtin.import_playbook: files.yml
   tags: fast, minimal
 
 - name: Install cheat
