@@ -51,6 +51,7 @@
           become: true # Run tasks as sudo
           ansible.builtin.command: pkill firefox
           changed_when: false
+          failed_when: false
 
         - name: Update firefox package
           become: true # Run tasks as sudo
