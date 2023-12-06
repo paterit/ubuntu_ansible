@@ -11,6 +11,8 @@
         dest: "~/.config/allacritty/"
       - src: "files/local/share/konsole/WS.profile"
         dest: "~/.local/share/konsole/"
+      - src: "files/config/konsolerc"
+        dest: "~/.config/"
 
   tasks:
 
