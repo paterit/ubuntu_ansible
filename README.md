@@ -21,7 +21,7 @@ cd ubuntu_ansible && \
 ansible-playbook -K main.yml
 ```
 
-Log out and log in again to apply changes.
+Log out and log in again to apply all the changes.
 
 Then register your SSH keys by copying encrypted dotfiles as a zipped private repo (`dotfiles-main.zip`) from GitHub, running the `secrets.yml` playbook and inputting a password (eg. stored in the password manager) when prompted.
 
@@ -32,7 +32,7 @@ ansible-playbook --ask-vault-pass secrets.yml
 Once you have access to your private repos, you can run the  `main-after-secrets.yml` playbook:
 
 ```bash
-ansible-playbook main-after-secrets.yml
+ansible-playbook -K main-after-secrets.yml
 ```
 
 ## Testing on multipass

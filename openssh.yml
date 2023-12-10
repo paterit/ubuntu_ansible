@@ -1,0 +1,52 @@
+- name: Install and configure OpenSSH
+  hosts: localhost
+  become: false
+
+  tasks:
+    - name: Install OpenSSH
+      become: true
+      ansible.builtin.apt:
+        name: openssh-server
+        state: present
+
+    - name: Configure OpenSSH to work with SSH keys
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: "{{ item.state }}"
+      loop:
+        - {
+          regexp: "^#?PubkeyAuthentication",
+          line: "PubkeyAuthentication yes",
+          state: "present",
+        }
+        - {
+          regexp: "^#?PasswordAuthentication",
+          line: "PasswordAuthentication no",
+          state: "present",
+        }
+      register: sshd_config_keys
+
+    - name: Block SSH connections outside 192.168.*.* network
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?AllowUsers"
+        line: "AllowUsers *@192.168.*.*"
+        state: present
+      register: sshd_config_users
+
+    - name: Enable OpenSSH
+      become: true
+      ansible.builtin.systemd_service:
+        name: sshd
+        enabled: true
+
+    - name: Restart OpenSSH
+      when: sshd_config_keys.changed or sshd_config_users.changed
+      become: true
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
