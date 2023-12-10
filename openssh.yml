@@ -50,3 +50,9 @@
       ansible.builtin.service:
         name: sshd
         state: restarted
+
+    - name: Copy public key to authorized_keys
+      ansible.builtin.copy:
+        src: ~/.ssh/id_rsa_paterit.pub
+        dest: ~/.ssh/authorized_keys
+        mode: "0600"

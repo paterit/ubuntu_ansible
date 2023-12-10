@@ -76,6 +76,7 @@
           changed_when: false
 
     - name: Intall Alacritty
+      become: true # Run tasks as sudo. It happend that at this point it acted as normal user. Not sure why.
       block:
         - name: Add Alacritty repository
           ansible.builtin.apt_repository:

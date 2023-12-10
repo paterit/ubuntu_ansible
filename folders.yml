@@ -5,6 +5,7 @@
     folders:
       - "~/bin"
       - "~/apps"
+      - "~/.ssh"
 
   tasks:
     - name: Create folders

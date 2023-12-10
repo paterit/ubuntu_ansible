@@ -151,7 +151,7 @@
           become: true
           ansible.builtin.shell:
             cmd: PERL_MM_USE_DEFAULT=1 cpan App::cpanminus
-            creates: ~/perl5/bin/cpanm
+            creates: /usr/local/bin/cpanm
             executable: /bin/bash
 
         - name: Add cpanm to zsh
