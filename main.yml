@@ -60,3 +60,7 @@
 - name: Install AstroNVim
   ansible.builtin.import_playbook: astronvim.yml
   tags: slow
+
+- name: Install Logseq
+  ansible.builtin.import_playbook: logseq.yml
+  tags: slow

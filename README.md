@@ -29,7 +29,7 @@ Then register your SSH keys by copying encrypted dotfiles as a zipped private re
 ansible-playbook --ask-vault-pass secrets.yml
 ```
 
-Once you have access to your private repos, you can run the  `main-after-secrets.yml` playbook:
+Once you have access to your private repos, you can run the  `main-after-secrets.yml` playbook. You will be prompted for your password to run `sudo` tasks:
 
 ```bash
 ansible-playbook -K main-after-secrets.yml

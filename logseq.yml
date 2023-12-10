@@ -1,0 +1,28 @@
+- name: Install Logseq application
+  hosts: localhost
+
+  vars:
+    logseq_version: "0.10.1"
+    logseq_arch: "x64"
+    logseq_file: "logseq-linux-{{ logseq_arch }}-{{ logseq_version }}.AppImage"
+    logseq_url: "https://github.com/logseq/logseq/releases/download/{{ logseq_version }}/{{ logseq_file }}"
+
+  tasks:
+    - name: Create folder for Logseq in ~/apps
+      ansible.builtin.file:
+        path: "~/apps/logseq"
+        state: directory
+        mode: "0755"
+
+    - name: Download Logseq
+      ansible.builtin.get_url:
+        url: "{{ logseq_url }}"
+        dest: "~/apps/logseq/{{ logseq_file }}"
+        mode: "0764"
+
+    - name: Create symlink to Logseq
+      ansible.builtin.file:
+        src: "~/apps/logseq/{{ logseq_file }}"
+        dest: "~/apps/logseq/logseq.AppImage"
+        state: link
+        mode: "0764"
