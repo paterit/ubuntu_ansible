@@ -1,0 +1,31 @@
+- name: Update all installed packages
+  hosts: localhost
+
+  tasks:
+    - name: Update apt packages # noqa: package-latest
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: true
+        autoremove: true
+        autoclean: true
+        state: latest
+
+    - name: Update snap packages
+      become: true
+      ansible.builtin.shell: |
+        snap refresh
+      changed_when: false
+      failed_when: false
+
+    - name: Update homebrew packages # noqa: package-latest
+      community.general.homebrew:
+        update_homebrew: true
+        upgrade_all: true
+        state: latest
+
+    - name: Update cargo packages # noqa: package-latest
+      ansible.builtin.command:
+        cmd: cargo install-update -a
+      changed_when: false
+      failed_when: false
