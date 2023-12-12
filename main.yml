@@ -21,6 +21,10 @@
   ansible.builtin.import_playbook: cheat.yml
   tags: fast, minimal
 
+- name: Install Rust
+  ansible.builtin.import_playbook: rust.yml
+  tags: slow, minimal
+
 - name: Install packages and applications
   ansible.builtin.import_playbook: packages.yml
   tags: slow, minimal
@@ -51,10 +55,6 @@
 
 - name: Install javascript tools
   ansible.builtin.import_playbook: javascript.yml
-  tags: slow
-
-- name: Install Rust
-  ansible.builtin.import_playbook: rust.yml
   tags: slow
 
 - name: Install AstroNVim

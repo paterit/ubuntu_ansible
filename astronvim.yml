@@ -92,14 +92,14 @@
               - ripgrep
             state: present
 
-        - name: Install cargo packages
-          community.general.cargo:
-            name:
-              - watchexec-cli
-              - tree-sitter-cli
-            locked: true
-            state: present
-            executable: ~/.cargo/bin/cargo
+        # - name: Install cargo packages
+        #   community.general.cargo:
+        #     name:
+        #       - watchexec-cli
+        #       - tree-sitter-cli
+        #     locked: true
+        #     state: present
+        #     executable: ~/.cargo/bin/cargo
 
         - name: Install lazygit
           ansible.builtin.shell:
@@ -237,8 +237,8 @@
               - gdu
             state: present
 
-    - name: Install bottom
-      become: true
-      ansible.builtin.apt:
-        deb: https://github.com/ClementTsang/bottom/releases/download/0.9.6/bottom_0.9.6_amd64.deb
-        state: present
+    # - name: Install bottom
+    #   become: true
+    #   ansible.builtin.apt:
+    #     deb: https://github.com/ClementTsang/bottom/releases/download/0.9.6/bottom_0.9.6_amd64.deb
+    #     state: present

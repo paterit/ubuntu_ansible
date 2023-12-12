@@ -40,3 +40,9 @@
           ansible.builtin.shell:
             cmd: "~/.cargo/bin/rustup completions zsh > ~/.zfunc/_rustup"
             creates: ~/.zfunc/_rustup
+
+    - name: Install binstall cargo package
+      community.general.cargo:
+        name: cargo-binstall
+        state: present
+        executable: ~/.cargo/bin/cargo

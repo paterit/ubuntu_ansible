@@ -2,8 +2,50 @@
   hosts: localhost
   become: true # Run tasks as sudo
 
-  tasks:
+  vars:
+    apt_packages:
+      - git
+      - geany
+      - git-gui
+      - vim
+      - meld
+      - htop
+      - keepass2
+      - python3-pip
+      - python3-venv
+      - python3-apt
+      - rclone
+      - xclip
+      - p7zip-full
+      - ffmpeg
+      - tldr
+      - tmux
+      - simplescreenrecorder
+      - xournalpp
 
+    snap_packages:
+      - multipass
+      - code
+      - spotify
+      - firefox
+
+    homebrew_packages:
+      - fzf
+      - ripgrep
+
+    cargo_packages:
+      - package: 'watchexec-cli'
+        binary: 'watchexec'
+      - package: 'tree-sitter-cli'
+        binary: 'tree-sitter'
+      - package: 'du-dust'
+        binary: 'dust'
+      - package: 'bottom'
+        binary: 'btm'
+      - package: 'cargo-updater'
+        binary: 'cargo-updater'
+
+  tasks:
     - name: Repo for Keepass2
       ansible.builtin.apt_repository:
         repo: ppa:ubuntuhandbook1/keepass2
@@ -11,39 +53,17 @@
 
     - name: Install standard apt packages
       ansible.builtin.apt:
-        name:
-          - git
-          - geany
-          - git-gui
-          - vim
-          - meld
-          - htop
-          - keepass2
-          - python3-pip
-          - python3-venv
-          - python3-apt
-          - rclone
-          - xclip
-          - p7zip-full
-          - ffmpeg
-          - tldr
-          - tmux
-          - simplescreenrecorder
-          - xournalpp
+        name: "{{ item }}"
         state: present
-        autoremove: true
-        update_cache: true
+      loop: "{{ apt_packages }}"
 
     - name: Install snap packages
       become: true # Run tasks as sudo
       community.general.snap:
-        name:
-          - multipass
-          - code
-          - spotify
-          - firefox
+        name: "{{ item }}"
         state: present
         classic: true
+      loop: "{{ snap_packages }}"
 
     - name: Update firefox to latest version # above snap install will not update to latest version if already installed
       block:
@@ -64,10 +84,9 @@
       block:
         - name: Install fzf
           community.general.homebrew:
-            name:
-              - fzf
-              - ripgrep
+            name: "{{ item }}"
             state: present
+          loop: "{{ homebrew_packages }}"
 
         - name: Install useful key bindings and fuzzy completion
           ansible.builtin.command: /home/linuxbrew/.linuxbrew/opt/fzf/install -all
@@ -88,3 +107,10 @@
           ansible.builtin.apt:
             name: alacritty
             state: present
+
+    - name: Install cargo packages
+      become: false # Run tasks as normal user
+      ansible.builtin.command:
+        cmd: ~/.cargo/bin/cargo binstall -y {{ item.package }}
+        creates: ~/.cargo/bin/{{ item.binary }}
+      loop: "{{ cargo_packages }}"
