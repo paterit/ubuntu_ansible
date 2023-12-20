@@ -1,0 +1,15 @@
+- name: Add running update.yml to cron
+  hosts: localhost
+
+  tasks:
+    - name: Add running update.yml to cron
+      become: true
+      ansible.builtin.cron:
+        name: "update_yml"
+        hour: "*/8"
+        job: >
+          ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v /home/{{ ansible_user_id }}/ubuntu_ansible/update.yml >>
+          /home/{{ ansible_user_id }}/.local/logs/ansible/update.log 2>&1
+        user: "{{ ansible_user_id }}"
+        cron_file: "packages_update_yml"
+        state: present

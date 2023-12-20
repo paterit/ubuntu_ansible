@@ -124,6 +124,4 @@ mkcd () {
 
 alias tnw="tmux new-window -a -n $1"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 export PATH=$PATH:$HOME/bin/

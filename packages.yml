@@ -4,6 +4,7 @@
 
   vars:
     apt_packages:
+      - build-essential
       - git
       - geany
       - git-gui
@@ -44,6 +45,10 @@
         binary: 'btm'
       - package: 'cargo-updater'
         binary: 'cargo-updater'
+      - package: 'bat'
+        binary: 'bat'
+      - package: 'exa'
+        binary: 'exa'
 
   tasks:
     - name: Repo for Keepass2
@@ -81,18 +86,16 @@
 
     - name: Install homebrew packages
       become: false # Run tasks as normal user
-      block:
-        - name: Install fzf
-          community.general.homebrew:
-            name: "{{ item }}"
-            state: present
-          loop: "{{ homebrew_packages }}"
+      community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ homebrew_packages }}"
 
-        - name: Install useful key bindings and fuzzy completion
-          ansible.builtin.command: /home/linuxbrew/.linuxbrew/opt/fzf/install -all
-          register: fzf_install
-          failed_when: fzf_install.rc != 0 and fzf_install.rc != 1
-          changed_when: false
+    - name: Install fzf key bindings and fuzzy completion
+      become: false # Run tasks as normal user
+      ansible.builtin.command:
+        cmd: /home/linuxbrew/.linuxbrew/opt/fzf/install --all
+        creates: ~/.fzf.zsh
 
     - name: Intall Alacritty
       become: true # Run tasks as sudo. It happend that at this point it acted as normal user. Not sure why.

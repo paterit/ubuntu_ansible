@@ -10,6 +10,7 @@
         autoremove: true
         autoclean: true
         state: latest
+      tags: [print_action]
 
     - name: Update snap packages
       become: true
@@ -26,6 +27,6 @@
 
     - name: Update cargo packages # noqa: package-latest
       ansible.builtin.command:
-        cmd: cargo install-update -a
+        cmd: /home/{{ ansible_user_id }}/.cargo/bin/cargo updater -u
       changed_when: false
       failed_when: false

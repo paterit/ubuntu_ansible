@@ -7,29 +7,31 @@
         - name: Install pyenv dependencies
           become: true # Run tasks as root
           ansible.builtin.apt:
-            name:
-              - build-essential
-              - zlib1g-dev
-              - libffi-dev
-              - libssl-dev
-              - libbz2-dev
-              - libreadline-dev
-              - libsqlite3-dev
-              - liblzma-dev
-              - tk-dev
-              - python3-pip
-              - python3-venv
-              - python3-dev
-              - python3-apt
+            name: "{{ item }}"
             state: present
+          loop:
+            - build-essential
+            - zlib1g-dev
+            - libffi-dev
+            - libssl-dev
+            - libbz2-dev
+            - libreadline-dev
+            - libsqlite3-dev
+            - liblzma-dev
+            - tk-dev
+            - python3-pip
+            - python3-venv
+            - python3-dev
+            - python3-apt
 
         - name: Install pyenv with homebrew
           become: false # Run tasks as normal user
           community.general.homebrew:
-            name:
-              - pyenv
-              - pyenv-virtualenv
+            name: "{{ item }}"
             state: present
+          loop:
+            - pyenv
+            - pyenv-virtualenv
 
         - name: Add pyenv to Zsh
           ansible.builtin.blockinfile:
@@ -83,10 +85,11 @@
         - name: Install poetry dependencies
           become: true # Run tasks as root
           ansible.builtin.apt:
-            name:
-              - curl
-              - python3-distutils
+            name: "{{ item }}"
             state: present
+          loop:
+            - curl
+            - python3-distutils
 
         - name: Install poetry with pipx
           community.general.pipx:

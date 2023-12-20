@@ -9,15 +9,13 @@
         state: present
       become: true
 
-    - name: Check if minikube is installed
-      ansible.builtin.command:
-        cmd: minikube version
-      register: minikube_installed
-      failed_when: false
-      changed_when: false
+    - name: Check if minikube binary is installed
+      ansible.builtin.stat:
+        path: /usr/bin/minikube
+      register: minikube_binary_installed
 
     - name: Install minikube
-      when: minikube_installed.rc != 0
+      when: not minikube_binary_installed.stat.exists
       block:
 
         - name: Install minikube

@@ -64,3 +64,7 @@
 - name: Install Logseq
   ansible.builtin.import_playbook: logseq.yml
   tags: slow
+
+- name: Install cron jobs
+  ansible.builtin.import_playbook: cron.yml
+  tags: fast

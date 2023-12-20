@@ -7,17 +7,16 @@
     download_url: "https://github.com/cheat/cheat/releases/download/{{ cheat_version }}/cheat-linux-amd64.gz"
     temp_file: "/tmp/cheat-linux-amd64.gz"
     executable_file: "/tmp/cheat-linux-amd64"
+    binary_install_dir: "/usr/local/bin"
 
   tasks:
-    - name: Check if cheat is already installed
-      ansible.builtin.command:
-        cmd: "cheat -v"
-      register: cheat_version_output
-      failed_when: false
-      changed_when: false
+    - name: Check if cheat binary exists
+      ansible.builtin.stat:
+        path: "{{ binary_install_dir }}/cheat"
+      register: executable_file_stat
 
     - name: Install cheat
-      when: cheat_version_output.rc != 0
+      when: not executable_file_stat.stat.exists
       block:
 
         - name: Download cheat binary
@@ -47,7 +46,7 @@
             repo: "https://github.com/cheat/cheatsheets.git"
             dest: "~/.config/cheat/cheatsheets/community"
 
-        - name: Run cheat to generate config file and directories
+        - name: Generate cheat config file and directories
           ansible.builtin.shell:
             cmd: |
               mkdir -p ~/.config/cheat

@@ -7,7 +7,7 @@ mount:
 	-@multipass mount . $(instance_name):/home/ubuntu/ubuntu_ansible
 	
 new_instance:
-	@multipass launch -n $(instance_name) -c 4 -m 8G -d 30G
+	@multipass launch -n $(instance_name) -c 8 -m 8G -d 30G
 	@multipass exec $(instance_name) -- sudo apt update
 	@multipass exec $(instance_name) -- sudo add-apt-repository --yes --update ppa:ansible/ansible
 	@multipass exec $(instance_name) -- sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt upgrade -y
@@ -47,4 +47,7 @@ minimal_test_no_secrets: clean_install_ansible mount
 minimal_test: minimal_test_no_secrets secrets
 
 test: mount
-	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook python.yml
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags minimal
+
+debug:
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v main.yml

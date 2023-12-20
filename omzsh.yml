@@ -5,10 +5,11 @@
     - name: Install zsh packages
       become: true
       ansible.builtin.apt:
-        name:
-          - git
-          - zsh
+        name: "{{ item }}"
         state: present
+      loop:
+        - git
+        - zsh
 
     - name: Change user shell to zsh
       become: true

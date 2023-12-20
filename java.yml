@@ -11,14 +11,15 @@
 
     - name: Install required packages
       ansible.builtin.apt:
-        name:
-          - openjdk-17-jdk
-          - openjdk-17-jre
-          - openjdk-18-jdk
-          - gnupg2
-          - software-properties-common
+        name: "{{ item }}"
         state: present
         update_cache: true
+      loop:
+        - openjdk-17-jdk
+        - openjdk-17-jre
+        - openjdk-18-jdk
+        - gnupg2
+        - software-properties-common
 
     - name: Install Oracle Java
       ansible.builtin.apt:

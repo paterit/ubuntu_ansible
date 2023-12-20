@@ -4,18 +4,13 @@
 
   tasks:
 
-    - name: Check if Chrome is installed
-      ansible.builtin.shell:
-        cmd: |
-          set -o pipefail
-          dpkg -l | grep google-chrome-stable
-        executable: /bin/zsh
-      register: chrome_check
-      changed_when: false
-      failed_when: false
+    - name: Check if google-chrome binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/google-chrome
+      register: chrome_binary
 
     - name: Download and install Chrome
-      when: chrome_check.stdout == ""
+      when: not chrome_binary.stat.exists
       block:
         - name: Download Chrome
           ansible.builtin.get_url:
@@ -34,5 +29,3 @@
           ansible.builtin.apt:
             deb: "/tmp/google-chrome-stable_current_amd64.deb"
             state: present
-          register: chrome_install
-          until: chrome_install is succeeded

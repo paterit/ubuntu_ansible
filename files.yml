@@ -9,11 +9,21 @@
         dest: "~/"
       - src: "files/config/allacritty.yml"
         dest: "~/.config/allacritty/"
-      - src: "files/local/share/konsole/WS.profile"
+      - src: "files/local/share/konsole/WS.profile" # KDE Konsole profile
         dest: "~/.local/share/konsole/"
     files_force:
-      - src: "files/config/konsolerc"
+      - src: "files/config/konsolerc" # KDE Konsole config
         dest: "~/.config/"
+      # - src: "files/config/kdeglobals" # KDE global config
+      #   dest: "~/.config/"
+      # - src: "files/config/kwinrc" # KDE KWin config
+      #   dest: "~/.config/"
+      # - src: "files/config/plasma-org.kde.plasma.desktop-appletsrc" # KDE Plasma config
+      #   dest: "~/.config/"
+      # - src: "files/config/plasmarc" # KDE Plasma config - wallpapers
+      #   dest: "~/.config/"
+      # - src: "files/config/kgblobalshortcutsrc" # KDE Plasma config - global shortcuts
+      #   dest: "~/.config/"
 
   tasks:
 

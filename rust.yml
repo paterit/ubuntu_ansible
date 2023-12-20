@@ -13,10 +13,11 @@
         - name: Install Rust dependencies
           become: true
           ansible.builtin.apt:
-            name:
-              - curl
-              - build-essential
+            name: "{{ item }}"
             state: present
+          loop:
+            - curl
+            - build-essential
 
         - name: Download install script
           ansible.builtin.get_url:

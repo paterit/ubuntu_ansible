@@ -6,26 +6,25 @@
     linuxbrew_install_url: "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
 
   tasks:
-    - name: Install dependecies
-      ansible.builtin.package:
-        name:
-          - build-essential
-          - curl
-          - git
-        state: present
-      become: true
-
     - name: Check if brew is installed
-      ansible.builtin.shell:
-        cmd: "/home/linuxbrew/.linuxbrew/bin/brew --version"
-        executable: /bin/zsh
-      register: brew_version_output
-      failed_when: false
-      changed_when: false
+      ansible.builtin.stat:
+        path: "/home/linuxbrew/.linuxbrew/bin/brew"
+      register: brew_installed
 
     - name: Install brew
-      when: brew_version_output.rc != 0
+      when: not brew_installed.stat.exists
       block:
+
+        - name: Install dependecies
+          become: true
+          ansible.builtin.package:
+            name: "{{ item }}"
+            state: present
+          loop:
+            - build-essential
+            - curl
+            - git
+            - gcc
 
         - name: Temporary directory
           ansible.builtin.file:
