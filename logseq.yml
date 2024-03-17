@@ -2,7 +2,7 @@
   hosts: localhost
 
   vars:
-    logseq_version: "0.10.1"
+    logseq_version: "0.10.7"
     logseq_arch: "x64"
     logseq_file: "logseq-linux-{{ logseq_arch }}-{{ logseq_version }}.AppImage"
     logseq_url: "https://github.com/logseq/logseq/releases/download/{{ logseq_version }}/{{ logseq_file }}"
