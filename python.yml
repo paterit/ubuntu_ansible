@@ -61,23 +61,26 @@
 
     - name: Install pipx
       block:
-        - name: Install pipx with pip
-          become: false # Run tasks as normal user
-
-          ansible.builtin.pip:
-            name: pipx
-            extra_args: --user
+        - name: Install pipx dependencies
+          become: true # Run tasks as root
+          ansible.builtin.apt:
+            name: "{{ item }}"
             state: present
+          loop:
+            - pipx
+      
+          tags: pipx
 
         - name: Add pipx to Zsh
           ansible.builtin.blockinfile:
             path: "{{ ansible_env.HOME }}/.zshrc"
             marker: "# {mark} PIPX ANSIBLE MANAGED BLOCK"
             block: |
-              export PATH="$HOME/.local/bin:$PATH"
               autoload -Uz compinit
               compinit
               eval "$(register-python-argcomplete pipx)"
+
+          tags: pipx
 
     - name: Poetry
       block:
