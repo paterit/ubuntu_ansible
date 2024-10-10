@@ -1,0 +1,11 @@
+- name: Install Devbox
+  hosts: localhost
+
+  tasks:
+    - name: Install Devbox (this takes couple of minutes)
+      ansible.builtin.shell:
+        cmd: |
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          nix profile install github:jetify-com/devbox/0.13.4
+        executable: /bin/zsh
+        creates: "~/.nix-profile/bin/devbox"

@@ -1,0 +1,57 @@
+- name: Download and install Nix
+  hosts: localhost
+
+  # based on https://github.com/danielrolls/nix-install/tree/master
+
+  vars:
+    nix_version: "2.24.9"
+    # https://releases.nixos.org/nix/nix-2.24.9/nix-2.24.9-x86_64-linux.tar.xz
+    nix_build: "nix-{{ nix_version }}-x86_64-linux"
+    installer_path: "https://releases.nixos.org/nix/nix-{{ nix_version }}/{{ nix_build }}.tar.xz"
+    installer_checksum: "sha256:3c0779e4878d1289cf3fbb158ec5ea9bdf61dfb9b4efac6b3b0b6bec5ba4cf13"
+    flakes: true
+
+  tasks:
+    - name: Download and run installer
+      block:
+        - name: Download installer
+          ansible.builtin.get_url:
+            url: "{{ installer_path }}"
+            dest: /tmp
+            checksum: "{{ installer_checksum }}"
+            mode: "0755"
+
+        - name: Extract installer
+          ansible.builtin.unarchive:
+            src: /tmp/{{ nix_build }}.tar.xz
+            remote_src: true
+            dest: /tmp/
+
+        - name: Run the installer
+          become: true
+          ansible.builtin.shell:
+            cmd: ./install --daemon </dev/null
+            chdir: /tmp/{{ nix_build }}
+            creates: /nix
+
+    - name: Enable flakes
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/nix/nix.conf
+        line: "experimental-features = nix-command flakes"
+      when: flakes
+
+    - name: Add arbritrary nix config
+      ansible.builtin.blockinfile:
+        path: /etc/nix/nix.conf
+        block: "{{ config }}"
+      become: true
+      when: config is defined
+
+    - name: Run nix commands
+      ansible.builtin.shell: |
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        {{ item }}
+      changed_when: true
+      loop: "{{ nix_commands }}"
+      when: nix_commands is defined

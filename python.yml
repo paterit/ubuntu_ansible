@@ -1,117 +1,32 @@
-- name: Install python environments and tools
+- name: Install Python (uv)
   hosts: localhost
 
+  vars:
+    python_versions:
+      - "3.10"
+      - "3.11"
+      - "3.12"
+
   tasks:
-    - name: Install pyenv
-      block:
-        - name: Install pyenv dependencies
-          become: true # Run tasks as root
-          ansible.builtin.apt:
-            name: "{{ item }}"
-            state: present
-          loop:
-            - build-essential
-            - zlib1g-dev
-            - libffi-dev
-            - libssl-dev
-            - libbz2-dev
-            - libreadline-dev
-            - libsqlite3-dev
-            - liblzma-dev
-            - tk-dev
-            - python3-pip
-            - python3-venv
-            - python3-dev
-            - python3-apt
+    - name: Install uv
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          curl -fsSL https://astral.sh/uv/install.sh | sh
+        executable: /bin/zsh
+        creates: "~/.cargo/bin/uv"
 
-        - name: Install pyenv with homebrew
-          become: false # Run tasks as normal user
-          community.general.homebrew:
-            name: "{{ item }}"
-            state: present
-          loop:
-            - pyenv
-            - pyenv-virtualenv
+    - name: Get installed Python versions
+      ansible.builtin.shell:
+        cmd: "~/.cargo/bin/uv python list --only-installed"
+        executable: /bin/zsh
+      register: installed_python_versions
+      changed_when: true
 
-        - name: Add pyenv to Zsh
-          ansible.builtin.blockinfile:
-            path: "{{ ansible_env.HOME }}/.zshrc"
-            marker: "# {mark} PYENV ANSIBLE MANAGED BLOCK"
-            block: |
-              # Pyenv
-              export PYENV_ROOT="$HOME/.pyenv"
-              [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-              eval "$(pyenv init -)"
-              eval "$(pyenv virtualenv-init -)"
-
-        - name: Install last stable versions of python under pyenv
-          ansible.builtin.shell:
-            cmd: ". ~/.zshrc && pyenv install -s {{ item }}"
-            executable: /bin/zsh
-            creates: "~/.pyenv/versions/{{ item }}"
-          loop:
-            - "3.11.8"
-
-        - name: Install 3.12 version of python under pyenv # https://github.com/pyenv/pyenv/issues/2823
-          ansible.builtin.shell:
-            cmd: |
-              . ~/.zshrc && brew unlink pkg-config && pyenv install -s 3.12.2
-            executable: /bin/zsh
-            creates: "~/.pyenv/versions/3.12.2"
-
-    - name: Install pipx
-      block:
-        - name: Install pipx dependencies
-          become: true # Run tasks as root
-          ansible.builtin.apt:
-            name: "{{ item }}"
-            state: present
-          loop:
-            - pipx
-      
-          tags: pipx
-
-        - name: Add pipx to Zsh
-          ansible.builtin.blockinfile:
-            path: "{{ ansible_env.HOME }}/.zshrc"
-            marker: "# {mark} PIPX ANSIBLE MANAGED BLOCK"
-            block: |
-              autoload -Uz compinit
-              compinit
-              eval "$(register-python-argcomplete pipx)"
-
-          tags: pipx
-
-    - name: Poetry
-      block:
-        - name: Install poetry dependencies
-          become: true # Run tasks as root
-          ansible.builtin.apt:
-            name: "{{ item }}"
-            state: present
-          loop:
-            - curl
-            - python3-distutils
-
-        - name: Install poetry with pipx
-          community.general.pipx:
-            name: poetry
-            state: present
-
-        - name: Create zsh plugin folder for poetry
-          ansible.builtin.shell:
-            cmd: "mkdir -p {{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry"
-            executable: /bin/zsh
-            creates: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry"
-
-        - name: Generate poetry autocomplete
-          ansible.builtin.shell:
-            cmd: "~/.local/bin/poetry completions zsh > {{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry/_poetry"
-            executable: /bin/zsh
-            creates: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/poetry/_poetry"
-
-        - name: Poetry will create venv in project folder
-          ansible.builtin.shell:
-            cmd: ~/.local/bin/poetry config virtualenvs.in-project true
-            creates: "{{ ansible_env.HOME }}/.config/pypoetry/config.toml"
-            executable: /bin/zsh
+    - name: Install Python versions with uv
+      ansible.builtin.shell:
+        cmd: "~/.cargo/bin/uv python install {{ item }}"
+        executable: /bin/zsh
+      when: item not in installed_python_versions.stdout
+      loop: "{{ python_versions }}"
+      changed_when: true

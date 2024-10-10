@@ -47,7 +47,18 @@ minimal_test_no_secrets: clean_install_ansible mount
 minimal_test: minimal_test_no_secrets secrets
 
 test: mount
-	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags minimal
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook devbox.yml
+
+mp_restore_devbox:
+	@multipass stop $(instance_name)
+	@multipass restore --destructive $(instance_name).nix
+	@multipass start $(instance_name)
+	
+mp_test:
+	@multipass stop $(instance_name)
+	@multipass restore --destructive $(instance_name).test
+	@multipass start $(instance_name)
+	make test
 
 debug:
-	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v main.yml
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v devbox.yml

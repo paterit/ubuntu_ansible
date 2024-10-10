@@ -21,12 +21,24 @@
   ansible.builtin.import_playbook: cheat.yml
   tags: fast, minimal
 
+- name: Install Nix
+  ansible.builtin.import_playbook: nix.yml
+  tags: slow, minimal
+
+- name: Install Devbox
+  ansible.builtin.import_playbook: devbox.yml
+  tags: slow, minimal
+
 - name: Install Rust
   ansible.builtin.import_playbook: rust.yml
   tags: slow, minimal
 
-- name: Install packages and applications
+- name: Install base packages
   ansible.builtin.import_playbook: packages.yml
+  tags: fast, minimal
+
+- name: Install extended packages and applications
+  ansible.builtin.import_playbook: packages-ext.yml
   tags: slow, minimal
 
 - name: Install Chrome
@@ -37,9 +49,9 @@
   ansible.builtin.import_playbook: python.yml
   tags: slow
 
-- name: Install Java
-  ansible.builtin.import_playbook: java.yml
-  tags: slow
+# - name: Install Java
+#   ansible.builtin.import_playbook: java.yml
+#   tags: slow
 
 - name: Add known hosts
   ansible.builtin.import_playbook: known_hosts.yml
@@ -61,9 +73,9 @@
   ansible.builtin.import_playbook: astronvim.yml
   tags: slow
 
-- name: Install Logseq
-  ansible.builtin.import_playbook: logseq.yml
-  tags: slow
+# - name: Install Logseq
+#   ansible.builtin.import_playbook: logseq.yml
+#   tags: slow
 
 - name: Install cron jobs
   ansible.builtin.import_playbook: cron.yml
