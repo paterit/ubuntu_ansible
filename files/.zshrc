@@ -121,6 +121,11 @@ mkcd () {
 	cd -P -- "$1"
 }
 
+mdcd () {
+	mkdir -p -- "$1" &&
+	cd -P -- "$1"
+}
+
 alias tnw="tmux new-window -a -n $1"
 
 export PATH=$PATH:$HOME/bin/
