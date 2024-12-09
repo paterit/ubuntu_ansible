@@ -14,18 +14,18 @@
           set -o pipefail
           curl -fsSL https://astral.sh/uv/install.sh | sh
         executable: /bin/zsh
-        creates: "~/.cargo/bin/uv"
+        creates: "~/.local/bin/uv"
 
     - name: Get installed Python versions
       ansible.builtin.shell:
-        cmd: "~/.cargo/bin/uv python list --only-installed"
+        cmd: "~/.local/bin/uv python list --only-installed"
         executable: /bin/zsh
       register: installed_python_versions
       changed_when: true
 
     - name: Install Python versions with uv
       ansible.builtin.shell:
-        cmd: "~/.cargo/bin/uv python install {{ item }}"
+        cmd: "~/.local/bin/uv python install {{ item }}"
         executable: /bin/zsh
       when: item not in installed_python_versions.stdout
       loop: "{{ python_versions }}"

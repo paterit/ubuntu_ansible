@@ -41,14 +41,14 @@
     - name: Enable OpenSSH
       become: true
       ansible.builtin.systemd_service:
-        name: sshd
+        name: ssh
         enabled: true
 
     - name: Restart OpenSSH
       when: sshd_config_keys.changed or sshd_config_users.changed
       become: true
       ansible.builtin.service:
-        name: sshd
+        name: ssh
         state: restarted
 
     - name: Copy public key to authorized_keys
