@@ -15,6 +15,7 @@
       - code
       - spotify
       - firefox
+      - multipass
 
     homebrew_packages:
       - fzf
