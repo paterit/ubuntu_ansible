@@ -73,6 +73,10 @@
   ansible.builtin.import_playbook: cursor.yml
   tags: slow
 
+- name: Configure git
+  ansible.builtin.import_playbook: git.yml
+  tags: fast
+
 # - name: Install AstroNVim
 #   ansible.builtin.import_playbook: astronvim.yml
 #   tags: slow

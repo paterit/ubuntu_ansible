@@ -1,0 +1,17 @@
+- name: Configure git
+  hosts: localhost
+
+  vars:
+    git_user: "Wojciech Semik"
+    git_email: "wojtek.semik@gmail.com"
+
+  tasks:
+    - name: Set global git user and email
+      community.general.git_config:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        scope: global
+        state: present
+      loop:
+        - { name: "user.name", value: "Wojciech Semik" }
+        - { name: "user.email", value: "wojtek.semik@gmail.com" }
