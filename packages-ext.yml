@@ -65,6 +65,7 @@
             create: true
             path: /etc/zsh/zprofile
             line: "emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'"
+            mode: "0644"
             state: present
 
     - name: Update firefox to latest version # above snap install will not update to latest version if already installed
