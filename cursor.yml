@@ -1,0 +1,44 @@
+- name: Install Cursor IDE application
+  hosts: localhost
+
+  vars:
+    cursor_url: "https://downloader.cursor.sh/linux/appImage/x64"
+
+  tasks:
+    - name: Create folder for Cursor in ~/apps
+      ansible.builtin.file:
+        path: "~/apps/cursor"
+        state: directory
+        mode: "0755"
+
+    - name: Download Cursor
+      ansible.builtin.get_url:
+        url: "{{ cursor_url }}"
+        dest: "~/apps/cursor/"
+        mode: "0764"
+      register: download_result
+
+    - name: Create symlink to Cursor
+      ansible.builtin.file:
+        src: "{{ download_result.dest }}"
+        dest: "~/bin/cursor"
+        force: true
+        state: link
+        mode: "0764"
+
+    - name: Copy apparmor config file to enable save Cursor runs
+      become: true
+      ansible.builtin.copy:
+        src: "files/cursor-appimage"
+        dest: "/etc/apparmor.d/"
+        mode: "0644"
+      notify:
+        - Reload AppArmor
+
+  handlers:
+    - name: Reload AppArmor
+      become: true
+      ansible.builtin.shell:
+        cmd: sudo apparmor_parser -r /etc/apparmor.d/cursor-appimage
+        executable: /bin/zsh
+      changed_when: true

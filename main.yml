@@ -69,6 +69,10 @@
   ansible.builtin.import_playbook: javascript.yml
   tags: slow
 
+- name: Install Cursor
+  ansible.builtin.import_playbook: cursor.yml
+  tags: slow
+
 # - name: Install AstroNVim
 #   ansible.builtin.import_playbook: astronvim.yml
 #   tags: slow
