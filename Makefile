@@ -47,7 +47,7 @@ minimal_test_no_secrets: clean_install_ansible mount
 minimal_test: minimal_test_no_secrets secrets
 
 test: mount
-	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook devbox.yml
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook gnome_config.yml
 
 mp_restore_devbox:
 	@multipass stop $(instance_name)
@@ -62,3 +62,17 @@ mp_test:
 
 debug:
 	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v devbox.yml
+
+setup_python:
+	uv venv --python=python3.12
+	uv pip install ansible ansible-lint ansible-lint-galaxy
+
+dump_gnome_settings:
+	@mkdir -p files/gnome
+	dconf dump /org/gnome/terminal/legacy/profiles:/ > files/gnome/gnome-terminal-profiles.dconf
+	dconf dump /org/gnome/desktop/interface/ > files/gnome/gnome-desktop-interface.dconf
+	dconf dump /org/gnome/extensions/dash-to-dock/ > files/gnome/gnome-extensions-dash-to-dock.dconf
+	dconf dump /org/gnome/extensions/tactile/ > files/gnome/gnome-extensions-tactile.dconf
+	dconf dump /org/gnome/desktop/wm/ > files/gnome/gnome-desktop-wm.dconf
+	dconf dump /org/gnome/mutter/ > files/gnome/gnome-mutter.dconf
+	dconf dump /org/gnome/shell/keybindings/ > files/gnome/gnome-shell-keybindings.dconf

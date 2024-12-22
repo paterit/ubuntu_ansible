@@ -7,24 +7,8 @@
         dest: "~/"
       - src: "files/.tmux.conf"
         dest: "~/"
-      - src: "files/config/allacritty.yml"
-        dest: "~/.config/allacritty/"
-      - src: "files/local/share/konsole/WS.profile" # KDE Konsole profile
-        dest: "~/.local/share/konsole/"
-    files_force:
-      - src: "files/config/konsolerc" # KDE Konsole config
-        dest: "~/.config/"
-      # - src: "files/config/kdeglobals" # KDE global config
-      #   dest: "~/.config/"
-      # - src: "files/config/kwinrc" # KDE KWin config
-      #   dest: "~/.config/"
-      # - src: "files/config/plasma-org.kde.plasma.desktop-appletsrc" # KDE Plasma config
-      #   dest: "~/.config/"
-      # - src: "files/config/plasmarc" # KDE Plasma config - wallpapers
-      #   dest: "~/.config/"
-      # - src: "files/config/kgblobalshortcutsrc" # KDE Plasma config - global shortcuts
-      #   dest: "~/.config/"
-
+      - src: "files/config/alacritty.toml"
+        dest: "~/.config/alacritty/"
   tasks:
 
     - name: Copy files if they don't exist
@@ -36,13 +20,3 @@
         mode: "0644"
         force: false
       loop: "{{ files }}"
-
-    - name: Copy files if they exist
-      ansible.builtin.copy:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: "{{ ansible_user_id }}"
-        group: "{{ ansible_user_id }}"
-        mode: "0644"
-        force: true
-      loop: "{{ files_force }}"

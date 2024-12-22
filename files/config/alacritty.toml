@@ -1,0 +1,28 @@
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 12.0
+
+[font.bold]
+family = "Inconsolata Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "Inconsolata Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "Inconsolata Nerd Font"
+style = "Regular"
+
+[terminal.shell]
+args = ["new", "-A", "-s", "-0"]
+program = "tmux"
+
+[window]
+decorations = "none"
+startup_mode = "Windowed"
+dimensions = { columns = 155, lines = 78 }
+
+[terminal]

@@ -14,8 +14,8 @@
     snap_packages:
       - code
       - spotify
-      - firefox
       - multipass
+      - firefox
 
     homebrew_packages:
       - fzf

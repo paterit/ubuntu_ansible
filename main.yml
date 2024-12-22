@@ -37,6 +37,10 @@
   ansible.builtin.import_playbook: packages.yml
   tags: fast, minimal
 
+- name: Install nerd-fonts
+  ansible.builtin.import_playbook: nerdfonts.yml
+  tags: fast
+
 - name: Install extended packages and applications
   ansible.builtin.import_playbook: packages-ext.yml
   tags: slow, minimal
@@ -49,6 +53,7 @@
   ansible.builtin.import_playbook: python.yml
   tags: slow
 
+# use Devbox or devenv instead
 # - name: Install Java
 #   ansible.builtin.import_playbook: java.yml
 #   tags: slow
@@ -65,9 +70,10 @@
   ansible.builtin.import_playbook: k8s.yml
   tags: slow
 
-- name: Install javascript tools
-  ansible.builtin.import_playbook: javascript.yml
-  tags: slow
+# use Devbox or devenv instead
+# - name: Install javascript tools
+#   ansible.builtin.import_playbook: javascript.yml
+#   tags: slow
 
 - name: Install Cursor
   ansible.builtin.import_playbook: cursor.yml
@@ -87,4 +93,8 @@
 
 - name: Install cron jobs
   ansible.builtin.import_playbook: cron.yml
+  tags: fast
+
+- name: Load gnome settings
+  ansible.builtin.import_playbook: gnome_config.yml
   tags: fast

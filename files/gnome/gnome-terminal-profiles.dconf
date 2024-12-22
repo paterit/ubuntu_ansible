@@ -1,0 +1,13 @@
+[/]
+default='342c1408-f80e-4504-9d2b-26dd72890270'
+list=['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', '342c1408-f80e-4504-9d2b-26dd72890270']
+
+[:342c1408-f80e-4504-9d2b-26dd72890270]
+custom-command='tmux new -As0'
+default-size-columns=200
+default-size-rows=50
+font='Inconsolata Nerd Font 12'
+login-shell=false
+use-custom-command=true
+use-system-font=false
+visible-name='WS'

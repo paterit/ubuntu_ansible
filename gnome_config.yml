@@ -1,0 +1,40 @@
+# ansible task for configuring gnome settings
+- name: Load gnome settings
+  hosts: localhost
+
+  vars:
+    gnome_settings:
+      - src: "files/gnome/gnome-terminal-profiles.dconf"
+        dest: "/org/gnome/terminal/legacy/profiles:/"
+      - src: "files/gnome/gnome-desktop-interface.dconf"
+        dest: "/org/gnome/desktop/interface/"
+      - src: "files/gnome/gnome-extensions-dash-to-dock.dconf"
+        dest: "/org/gnome/extensions/dash-to-dock/"
+      - src: "files/gnome/gnome-extensions-tactile.dconf"
+        dest: "/org/gnome/extensions/tactile/"
+      - src: "files/gnome/gnome-desktop-wm.dconf"
+        dest: "/org/gnome/desktop/wm/"
+      - src: "files/gnome/gnome-mutter.dconf"
+        dest: "/org/gnome/mutter/"
+      - src: "files/gnome/gnome-shell-keybindings.dconf"
+        dest: "/org/gnome/shell/keybindings/"
+
+    gnome_extensions:
+      - name: tactile@lundal.io
+
+  tasks:
+    - name: Load gnome settings
+      ansible.builtin.shell:
+        cmd: |
+          dconf load {{ item.dest }} < {{ item.src }}
+        executable: /bin/zsh
+      loop: "{{ gnome_settings }}"
+      changed_when: false
+
+    - name: Install gnome extensions
+      ansible.builtin.shell:
+        cmd: |
+          /home/ubuntu/.local/bin/uvx gnome-extensions-cli install {{ item.name }}
+        executable: /bin/bash
+      loop: "{{ gnome_extensions }}"
+      changed_when: false

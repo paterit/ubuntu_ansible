@@ -1,0 +1,36 @@
+- name: Install nerd-fonts
+  hosts: localhost
+
+  tasks:
+    - name: Check if nerd-fonts is installed
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          fc-list | grep Inconsolata
+        executable: /bin/bash
+      register: nerd_fonts_installed
+      changed_when: false
+      failed_when: false
+
+
+    - name: Install nerd-fonts
+      when: nerd_fonts_installed.stdout == ""
+      block:
+        - name: Create ~/.local/share/fonts/NerdFonts
+          ansible.builtin.file:
+            path: ~/.local/share/fonts/NerdFonts
+            state: directory
+            mode: "0755"
+
+        - name: Download and unpack Inconsolata nerd-fonts
+          ansible.builtin.unarchive:
+            src: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Inconsolata.tar.xz
+            dest: ~/.local/share/fonts/NerdFonts
+            remote_src: true
+
+        - name: Update font cache
+          ansible.builtin.shell:
+            cmd: fc-cache -f -v
+            executable: /bin/bash
+          changed_when: false
+          failed_when: false

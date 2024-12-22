@@ -1,0 +1,13 @@
+[keybindings]
+maximize=@as []
+move-to-workspace-1=['<Control><Super>1']
+move-to-workspace-2=['<Control><Super>2']
+move-to-workspace-3=['<Control><Super>3']
+move-to-workspace-left=@as []
+move-to-workspace-right=@as []
+switch-to-workspace-left=['<Control><Super>Left']
+switch-to-workspace-right=['<Control><Super>Right']
+unmaximize=@as []
+
+[preferences]
+num-workspaces=3
