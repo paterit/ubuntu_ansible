@@ -4,11 +4,11 @@
   # based on https://github.com/danielrolls/nix-install/tree/master
 
   vars:
-    nix_version: "2.24.9"
+    nix_version: "2.26.1"
     # https://releases.nixos.org/nix/nix-2.24.9/nix-2.24.9-x86_64-linux.tar.xz
     nix_build: "nix-{{ nix_version }}-x86_64-linux"
     installer_path: "https://releases.nixos.org/nix/nix-{{ nix_version }}/{{ nix_build }}.tar.xz"
-    installer_checksum: "sha256:3c0779e4878d1289cf3fbb158ec5ea9bdf61dfb9b4efac6b3b0b6bec5ba4cf13"
+    installer_checksum: "sha256:fb6faa5d497bfa711eb59a970e894c1a850848d86355be1e18517cf3cf34eb15"
     flakes: true
 
   tasks:
