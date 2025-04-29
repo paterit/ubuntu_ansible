@@ -14,17 +14,12 @@
       - rclone
       - xclip
       - p7zip-full
-      - ffmpeg
       - tldr
       - tmux
       - curl
-      - libfuse2t64 # required on Ubuntu 24.04 for AppImages eg cursor
-      - dconf-editor
-      - gnome-tweaks
-      - gnome-shell-extensions
 
   tasks:
-    - name: Install standard apt packages
+    - name: Install standard apt packages - server
       ansible.builtin.apt:
         name: "{{ item }}"
         state: present

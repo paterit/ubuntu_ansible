@@ -36,10 +36,19 @@ full_test_no_secrets: clean_install_ansible mount_and_main
 full_test: full_test_no_secrets secrets
 	@multipass restart $(instance_name)
 
+server_test_continue: mount
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags server
+
+server_test_no_secrets: clean_install_ansible mount
+	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags server
+
+server_test: server_test_no_secrets secrets
+
 fast_test_no_secrets: clean_install_ansible mount
 	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags fast
 
 fast_test: fast_test_no_secrets secrets
+
 
 minimal_test_no_secrets: clean_install_ansible mount
 	@multipass exec $(instance_name) --working-directory /home/ubuntu/ubuntu_ansible -- ansible-playbook main.yml --tags minimal
@@ -65,14 +74,16 @@ debug:
 
 setup_python:
 	uv venv --python=python3.12
-	uv pip install ansible ansible-lint ansible-lint-galaxy
+	uv add ansible ansible-lint ansible-lint-galaxy
 
 dump_gnome_settings:
 	@mkdir -p files/gnome
 	dconf dump /org/gnome/terminal/legacy/profiles:/ > files/gnome/gnome-terminal-profiles.dconf
 	dconf dump /org/gnome/desktop/interface/ > files/gnome/gnome-desktop-interface.dconf
-	dconf dump /org/gnome/extensions/dash-to-dock/ > files/gnome/gnome-extensions-dash-to-dock.dconf
-	dconf dump /org/gnome/extensions/tactile/ > files/gnome/gnome-extensions-tactile.dconf
+	dconf dump /org/gnome/shell/extensions/dash-to-dock/ > files/gnome/gnome-shell-extensions-dash_to_dock.dconf
+	dconf dump /org/gnome/shell/extensions/tactile/ > files/gnome/gnome-shell-extensions-tactile.dconf
+	dconf dump /org/gnome/shell/extensions/Bluetooth-Battery-Meter/ > files/gnome/gnome-shell-extensions-bluetooth_battery_meter.dconf
 	dconf dump /org/gnome/desktop/wm/ > files/gnome/gnome-desktop-wm.dconf
 	dconf dump /org/gnome/mutter/ > files/gnome/gnome-mutter.dconf
 	dconf dump /org/gnome/shell/keybindings/ > files/gnome/gnome-shell-keybindings.dconf
+	dconf dump / > files/gnome/full_dump.dconf

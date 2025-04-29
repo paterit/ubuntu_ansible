@@ -2,7 +2,7 @@
   hosts: localhost
 
   tasks:
-    - name: Install dependecies
+    - name: Install dependencies - knownhosts
       ansible.builtin.package:
         name: jq
         state: present

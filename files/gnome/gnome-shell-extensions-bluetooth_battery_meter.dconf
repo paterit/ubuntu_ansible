@@ -1,0 +1,6 @@
+[/]
+enable-battery-indicator=false
+enable-battery-indicator-text=false
+enable-battery-level-text=true
+paired-supported-device-list=['{"path":"/org/bluez/hci0/dev_DD_9D_42_0A_C7_CB","icon":"input-keyboard","alias":"MX Keys Mini","paired":true,"battery-enabled":true,"indicator-enabled":true}', '{"path":"/org/bluez/hci0/dev_D6_4F_AF_96_77_E7","icon":"input-mouse","alias":"MX Vertical","paired":true,"battery-enabled":true,"indicator-enabled":true}']
+swap-icon-text=false

@@ -8,19 +8,22 @@
         dest: "/org/gnome/terminal/legacy/profiles:/"
       - src: "files/gnome/gnome-desktop-interface.dconf"
         dest: "/org/gnome/desktop/interface/"
-      - src: "files/gnome/gnome-extensions-dash-to-dock.dconf"
-        dest: "/org/gnome/extensions/dash-to-dock/"
-      - src: "files/gnome/gnome-extensions-tactile.dconf"
-        dest: "/org/gnome/extensions/tactile/"
+      - src: "files/gnome/gnome-shell-extensions-dash_to_dock.dconf"
+        dest: "/org/gnome/shell/extensions/dash-to-dock/"
+      - src: "files/gnome/gnome-shell-extensions-tactile.dconf"
+        dest: "/org/gnome/shell/extensions/tactile/"
       - src: "files/gnome/gnome-desktop-wm.dconf"
         dest: "/org/gnome/desktop/wm/"
       - src: "files/gnome/gnome-mutter.dconf"
         dest: "/org/gnome/mutter/"
       - src: "files/gnome/gnome-shell-keybindings.dconf"
         dest: "/org/gnome/shell/keybindings/"
+      - src: "files/gnome/gnome-shell-extensions-bluetooth_battery_meter.dconf"
+        dest: "/org/gnome/shell/extensions/Bluetooth-Battery-Meter/"
 
     gnome_extensions:
       - name: tactile@lundal.io
+      - name: Bluetooth-Battery-Meter@maniacx.github.com
 
   tasks:
     - name: Load gnome settings
@@ -31,7 +34,7 @@
       loop: "{{ gnome_settings }}"
       changed_when: false
 
-    - name: Install gnome extensions
+    - name: Install gnome extensions with uvx and gnome-extensions-cli
       ansible.builtin.shell:
         cmd: |
           /home/ubuntu/.local/bin/uvx gnome-extensions-cli install {{ item.name }}

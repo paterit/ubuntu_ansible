@@ -3,23 +3,23 @@
 
 - name: Install oh-my-zsh
   ansible.builtin.import_playbook: omzsh.yml
-  tags: fast, minimal
+  tags: fast, minimal, server
 
 - name: Install brew
   ansible.builtin.import_playbook: brew.yml
-  tags: slow, minimal
+  tags: slow, minimal, server
 
 - name: Install folders
   ansible.builtin.import_playbook: folders.yml
-  tags: fast, minimal
+  tags: fast, minimal, server
 
 - name: Install files
   ansible.builtin.import_playbook: files.yml
-  tags: fast, minimal
+  tags: fast, minimal, server
 
 - name: Install cheat
   ansible.builtin.import_playbook: cheat.yml
-  tags: fast, minimal
+  tags: fast, minimal, server
 
 - name: Install Nix
   ansible.builtin.import_playbook: nix.yml
@@ -31,19 +31,27 @@
 
 - name: Install Rust
   ansible.builtin.import_playbook: rust.yml
-  tags: slow, minimal
+  tags: slow, minimal, server
 
-- name: Install base packages
-  ansible.builtin.import_playbook: packages.yml
+- name: Install base packages server
+  ansible.builtin.import_playbook: packages-server.yml
+  tags: fast, minimal, server
+
+- name: Install base packages desktop
+  ansible.builtin.import_playbook: packages-desktop.yml
   tags: fast, minimal
 
 - name: Install nerd-fonts
   ansible.builtin.import_playbook: nerdfonts.yml
-  tags: fast
+  tags: fast, server
 
-- name: Install extended packages and applications
-  ansible.builtin.import_playbook: packages-ext.yml
-  tags: slow, minimal
+- name: Install extended packages and applications - server
+  ansible.builtin.import_playbook: packages-ext-server.yml
+  tags: slow, server
+
+- name: Install extended packages and applications - desktop
+  ansible.builtin.import_playbook: packages-ext-desktop.yml
+  tags: slow
 
 - name: Install Chrome
   ansible.builtin.import_playbook: chrome.yml
@@ -51,7 +59,7 @@
 
 - name: Install Python
   ansible.builtin.import_playbook: python.yml
-  tags: slow
+  tags: fast, server
 
 # use Devbox or devenv instead
 # - name: Install Java
@@ -81,12 +89,14 @@
 
 - name: Configure git
   ansible.builtin.import_playbook: git.yml
-  tags: fast
+  tags: fast, server
 
+# not using astronvim anymore
 # - name: Install AstroNVim
 #   ansible.builtin.import_playbook: astronvim.yml
 #   tags: slow
 
+# not using logseq anymore
 # - name: Install Logseq
 #   ansible.builtin.import_playbook: logseq.yml
 #   tags: slow

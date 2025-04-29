@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+  "packages": [
+    "uv@latest",
+    "just@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "source .venv/bin/activate",
+      "alias j=just",
+      "alias mp=multipass",
+      "echo 'Welcome to devbox!' > /dev/null"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}

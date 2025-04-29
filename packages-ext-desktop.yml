@@ -17,26 +17,6 @@
       - multipass
       - firefox
 
-    homebrew_packages:
-      - fzf
-      - ripgrep
-
-    cargo_packages:
-      - package: "watchexec-cli"
-        binary: "watchexec"
-      - package: "tree-sitter-cli"
-        binary: "tree-sitter"
-      - package: "du-dust"
-        binary: "dust"
-      - package: "bottom"
-        binary: "btm"
-      - package: "cargo-updater"
-        binary: "cargo-updater"
-      - package: "bat"
-        binary: "bat"
-      - package: "exa"
-        binary: "exa"
-
   tasks:
     - name: Repo for Keepass2
       ansible.builtin.apt_repository:
@@ -81,21 +61,8 @@
           ansible.builtin.command: snap refresh firefox
           changed_when: false
 
-    - name: Install homebrew packages
-      become: false # Run tasks as normal user
-      community.general.homebrew:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ homebrew_packages }}"
-
-    - name: Install fzf key bindings and fuzzy completion
-      become: false # Run tasks as normal user
-      ansible.builtin.command:
-        cmd: /home/linuxbrew/.linuxbrew/opt/fzf/install --all
-        creates: ~/.fzf.zsh
-
-    - name: Intall Alacritty
-      become: true # Run tasks as sudo. It happend that at this point it acted as normal user. Not sure why.
+    - name: Install Alacritty
+      become: true # Run tasks as sudo. It happened that at this point it acted as normal user. Not sure why.
       block:
         - name: Add Alacritty repository
           ansible.builtin.apt_repository:
@@ -107,10 +74,3 @@
           ansible.builtin.apt:
             name: alacritty
             state: present
-
-    - name: Install cargo packages
-      become: false # Run tasks as normal user
-      ansible.builtin.command:
-        cmd: ~/.cargo/bin/cargo binstall -y {{ item.package }}
-        creates: ~/.cargo/bin/{{ item.binary }}
-      loop: "{{ cargo_packages }}"

@@ -1,0 +1,192 @@
+[apps/update-manager]
+first-run=false
+launch-count=1
+launch-time=int64 1734962306
+show-details=true
+window-height=400
+window-width=645
+
+[com/mattjakeman/ExtensionManager]
+last-used-version='0.5.0'
+
+[com/ubuntu/update-notifier]
+release-check-time=uint32 1734627932
+
+[org/gnome/control-center]
+last-panel='power'
+window-state=(980, 1081, false)
+
+[org/gnome/desktop/app-folders]
+folder-children=['Utilities', 'YaST', 'Pardus']
+
+[org/gnome/desktop/app-folders/folders/Pardus]
+categories=['X-Pardus-Apps']
+name='X-Pardus-Apps.directory'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/Utilities]
+apps=['gnome-abrt.desktop', 'gnome-system-log.desktop', 'nm-connection-editor.desktop', 'org.gnome.baobab.desktop', 'org.gnome.Connections.desktop', 'org.gnome.DejaDup.desktop', 'org.gnome.Dictionary.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Evince.desktop', 'org.gnome.FileRoller.desktop', 'org.gnome.fonts.desktop', 'org.gnome.Loupe.desktop', 'org.gnome.seahorse.Application.desktop', 'org.gnome.tweaks.desktop', 'org.gnome.Usage.desktop', 'vinagre.desktop']
+categories=['X-GNOME-Utilities']
+name='X-GNOME-Utilities.directory'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/YaST]
+categories=['X-SuSE-YaST']
+name='suse-yast.directory'
+translate=true
+
+[org/gnome/desktop/input-sources]
+sources=[('xkb', 'us')]
+xkb-options=@as []
+
+[org/gnome/desktop/interface]
+color-scheme='prefer-dark'
+gtk-theme='Yaru-dark'
+icon-theme='Yaru'
+
+[org/gnome/desktop/notifications]
+application-children=['firefox-firefox', 'com-alacritty-alacritty', 'spotify-spotify']
+show-in-lock-screen=false
+
+[org/gnome/desktop/notifications/application/com-alacritty-alacritty]
+application-id='com.alacritty.Alacritty.desktop'
+
+[org/gnome/desktop/notifications/application/firefox-firefox]
+application-id='firefox_firefox.desktop'
+
+[org/gnome/desktop/notifications/application/spotify-spotify]
+application-id='spotify_spotify.desktop'
+
+[org/gnome/desktop/privacy]
+old-files-age=uint32 30
+recent-files-max-age=-1
+
+[org/gnome/desktop/session]
+idle-delay=uint32 300
+
+[org/gnome/desktop/wm/keybindings]
+maximize=@as []
+move-to-workspace-1=['<Control><Super>1']
+move-to-workspace-2=['<Control><Super>2']
+move-to-workspace-3=['<Control><Super>3']
+move-to-workspace-left=@as []
+move-to-workspace-right=@as []
+switch-to-workspace-left=['<Control><Super>Left']
+switch-to-workspace-right=['<Control><Super>Right']
+unmaximize=@as []
+
+[org/gnome/desktop/wm/preferences]
+num-workspaces=3
+
+[org/gnome/evolution-data-server]
+migrated=true
+
+[org/gnome/mutter]
+dynamic-workspaces=false
+edge-tiling=false
+
+[org/gnome/mutter/keybindings]
+toggle-tiled-left=@as []
+toggle-tiled-right=@as []
+
+[org/gnome/nautilus/preferences]
+migrated-gtk-settings=true
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=3600
+sleep-inactive-ac-type='nothing'
+
+[org/gnome/shell]
+command-history=['gconf-editor']
+disabled-extensions=['bluetooth-battery@michalw.github.com']
+enabled-extensions=['ding@rastersoft.com', 'tiling-assistant@ubuntu.com', 'tactile@lundal.io', 'ubuntu-dock@ubuntu.com', 'Bluetooth-Battery-Meter@maniacx.github.com']
+welcome-dialog-last-shown-version='46.0'
+
+[org/gnome/shell/extensions/Bluetooth-Battery-Meter]
+enable-battery-indicator=false
+enable-battery-indicator-text=false
+enable-battery-level-text=true
+paired-supported-device-list=['{"path":"/org/bluez/hci0/dev_DD_9D_42_0A_C7_CB","icon":"input-keyboard","alias":"MX Keys Mini","paired":true,"battery-enabled":true,"indicator-enabled":true}', '{"path":"/org/bluez/hci0/dev_D6_4F_AF_96_77_E7","icon":"input-mouse","alias":"MX Vertical","paired":true,"battery-enabled":true,"indicator-enabled":true}']
+swap-icon-text=false
+
+[org/gnome/shell/extensions/bluetooth_battery_indicator]
+devices=['{"name":"DELL 70N2F2A","mac":"3703","isActive":false}', '{"name":"MX Vertical","mac":"D6:4F:AF:96:77:E7","icon":"input-mouse-symbolic","isActive":true}', '{"name":"MX Keys Mini","mac":"DD:9D:42:0A:C7:CB","icon":"input-keyboard-symbolic","isActive":true}']
+hide-indicator=true
+
+[org/gnome/shell/extensions/dash-to-dock]
+background-opacity=0.80000000000000004
+dash-max-icon-size=32
+dock-fixed=false
+dock-position='RIGHT'
+extend-height=false
+height-fraction=0.90000000000000002
+preferred-monitor=-2
+preferred-monitor-by-connector='DP-2'
+
+[org/gnome/shell/extensions/ding]
+show-home=false
+
+[org/gnome/shell/extensions/tactile]
+col-1=2
+col-3=0
+layout-2-col-1=0
+layout-2-col-3=0
+layout-2-row-1=0
+layout-2-row-2=0
+layout-3-col-3=0
+layout-3-row-1=0
+layout-3-row-2=0
+layout-4-row-1=0
+layout-4-row-2=0
+monitor-0-layout=1
+row-1=0
+show-tiles=['<Super>Return']
+
+[org/gnome/shell/extensions/tiling-assistant]
+active-window-hint-color='rgb(211,70,21)'
+last-version-installed=46
+overridden-settings={'org.gnome.mutter.edge-tiling': <@mb nothing>, 'org.gnome.desktop.wm.keybindings.maximize': <@mb nothing>, 'org.gnome.desktop.wm.keybindings.unmaximize': <@mb nothing>, 'org.gnome.mutter.keybindings.toggle-tiled-left': <@mb nothing>, 'org.gnome.mutter.keybindings.toggle-tiled-right': <@mb nothing>}
+tiling-popup-all-workspace=true
+
+[org/gnome/shell/keybindings]
+open-new-window-application-1=@as []
+open-new-window-application-2=@as []
+open-new-window-application-3=@as []
+
+[org/gnome/shell/world-clocks]
+locations=@av []
+
+[org/gnome/terminal/legacy]
+always-check-default-terminal=true
+
+[org/gnome/terminal/legacy/profiles:]
+default='342c1408-f80e-4504-9d2b-26dd72890270'
+list=['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', '342c1408-f80e-4504-9d2b-26dd72890270']
+
+[org/gnome/terminal/legacy/profiles:/:342c1408-f80e-4504-9d2b-26dd72890270]
+custom-command='tmux new -As0'
+default-size-columns=200
+default-size-rows=50
+font='Inconsolata Nerd Font 12'
+login-shell=false
+use-custom-command=true
+use-system-font=false
+visible-name='WS'
+
+[org/gtk/gtk4/settings/file-chooser]
+show-hidden=false
+sort-directories-first=true
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=160
+sort-column='name'
+sort-directories-first=true
+sort-order='ascending'
+type-format='category'
+window-position=(1959, 262)
+window-size=(1203, 902)
