@@ -21,6 +21,14 @@ cd ubuntu_ansible && \
 ansible-playbook -K main.yml
 ```
 
+To install only server packages (no desktop environment), run:
+
+```bash
+git clone https://github.com/paterit/ubuntu_ansible.git && \
+cd ubuntu_ansible && \
+ansible-playbook -K main.yml --tags server
+```
+
 Log out and log in again to apply all the changes. Go to the `~/ubuntu_ansible` folder.
 
 Then register your SSH keys by copying encrypted (with ansible-vault) dotfiles as a zipped private repo (`dotfiles-main.zip`) from GitHub to your `$HOME` dir, running the `secrets.yml` playbook, and inputting a password (e.g., stored in the password manager) when prompted.
