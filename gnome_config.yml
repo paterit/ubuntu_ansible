@@ -37,7 +37,7 @@
     - name: Install gnome extensions with uvx and gnome-extensions-cli
       ansible.builtin.shell:
         cmd: |
-          /home/ubuntu/.local/bin/uvx gnome-extensions-cli install {{ item.name }}
+          ~/.local/bin/uvx gnome-extensions-cli install {{ item.name }}
         executable: /bin/bash
       loop: "{{ gnome_extensions }}"
       changed_when: false

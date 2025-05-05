@@ -8,6 +8,7 @@
       - dconf-editor
       - gnome-tweaks
       - gnome-shell-extensions
+      - gnome-shell-extension-manager
       - ffmpeg
       - gnome-shell-pomodoro
 
