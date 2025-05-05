@@ -9,6 +9,10 @@
         dest: "~/"
       - src: "files/config/alacritty.toml"
         dest: "~/.config/alacritty/"
+      - src: "files/.p10k.zsh"
+        dest: "~/"
+      - src: "files/settings.json"
+        dest: "~/.config/Cursor/User/"
   tasks:
 
     - name: Copy files if they don't exist

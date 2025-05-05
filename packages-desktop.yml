@@ -9,6 +9,7 @@
       - gnome-tweaks
       - gnome-shell-extensions
       - ffmpeg
+      - gnome-shell-pomodoro
 
   tasks:
     - name: Install standard apt packages - desktop
