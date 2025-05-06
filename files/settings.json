@@ -1,5 +1,5 @@
 {
-    "workbench.externalBrowser": "vivaldi.vivaldi-stable",
+    "workbench.externalBrowser": "firefox",
     "redhat.telemetry.enabled": false,
     "workbench.colorTheme": "Monokai ST3",
     "workbench.iconTheme": "Monokai Classic Icons",
@@ -91,6 +91,6 @@
 "editor.minimap.enabled": true,
 "cursor.general.gitGraphIndexing": "enabled",
 "git.openRepositoryInParentFolders": "never",
-"open-in-browser.default": "vivaldi.vivaldi-stable",
+"open-in-browser.default": "firefox",
 
 }
