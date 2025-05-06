@@ -21,7 +21,7 @@ args = ["new", "-A", "-s", "-0"]
 program = "tmux"
 
 [window]
-decorations = "none"
+decorations = "Full"
 startup_mode = "Windowed"
 dimensions = { columns = 155, lines = 78 }
 
