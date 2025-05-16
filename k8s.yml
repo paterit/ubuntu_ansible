@@ -31,16 +31,9 @@
             line: "source <(minikube completion zsh)"
             state: present
 
-    - name: Install kubectl
+    - name: Install kubectl auto-completion
+      # kubectl is in server-ext brew packages
       block:
-        - name: Install kubectl
-          community.general.snap:
-            name: kubectl
-            channel: latest/stable
-            classic: true
-            state: present
-          become: true
-
         - name: Add kubectl auto-completion to zsh
           ansible.builtin.lineinfile:
             path: "{{ ansible_env.HOME }}/.zshrc"
