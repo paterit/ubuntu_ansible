@@ -8,6 +8,8 @@
       - fzf
       - ripgrep
       - just
+      - kubectl
+      - tilt-dev/tap/ctlptl
 
     cargo_packages:
       - package: "watchexec-cli"
