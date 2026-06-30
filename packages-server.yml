@@ -1,26 +1,17 @@
-- name: Install additional packages on Ubuntu
+- name: Install base server packages
   hosts: localhost
-  become: true # Run tasks as sudo
-
-  vars:
-    apt_packages:
-      - build-essential
-      - git
-      - vim
-      - htop
-      - python3-pip
-      - python3-venv
-      - python3-apt
-      - rclone
-      - xclip
-      - p7zip-full
-      - tldr
-      - tmux
-      - curl
+  become: false  # Homebrew must not run as root; apt task elevates on its own.
 
   tasks:
-    - name: Install standard apt packages - server
+    - name: Install standard apt packages - server (Linux)
+      become: true
       ansible.builtin.apt:
-        name: "{{ item }}"
+        name: "{{ server_packages['Linux'] }}"
         state: present
-      loop: "{{ apt_packages }}"
+      when: ansible_system == "Linux"
+
+    - name: Install standard brew packages - server (macOS)
+      community.general.homebrew:
+        name: "{{ server_packages['Darwin'] }}"
+        state: present
+      when: ansible_system == "Darwin"

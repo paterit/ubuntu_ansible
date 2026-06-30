@@ -1,0 +1,74 @@
+---
+# Shared variables for every play (localhost is part of the implicit `all` group).
+# Edit package lists here rather than inside individual playbooks.
+
+# Convenience flags derived from gathered facts (ansible_system is Linux/Darwin).
+is_macos: "{{ ansible_system == 'Darwin' }}"
+is_linux: "{{ ansible_system == 'Linux' }}"
+
+# Git identity (used by git.yml)
+git_user: "Wojciech Semik"
+git_email: "wojtek.semik@gmail.com"
+
+# Path to the Homebrew binary per platform.
+#   - Apple Silicon: /opt/homebrew, Intel mac: /usr/local, Linuxbrew: /home/linuxbrew/.linuxbrew
+brew_bin: "{{ '/opt/homebrew/bin/brew' if is_macos else '/home/linuxbrew/.linuxbrew/bin/brew' }}"
+
+# Base "server" packages. Linux uses apt names; macOS uses brew formulae.
+# macOS drops Linux-only names (build-essential -> Xcode CLT, xclip -> pbcopy,
+# python3-* -> handled by uv, curl -> built in).
+server_packages:
+  Linux:
+    - build-essential
+    - git
+    - vim
+    - htop
+    - python3-pip
+    - python3-venv
+    - python3-apt
+    - rclone
+    - xclip
+    - p7zip-full
+    - tldr
+    - tmux
+    - curl
+  Darwin:
+    - git
+    - vim
+    - htop
+    - rclone
+    - p7zip
+    - tldr
+    - tmux
+
+# Extended server CLI tools installed via Homebrew on both platforms.
+ext_server_brew_packages:
+  - fzf
+  - ripgrep
+  - just
+  - kubectl
+  - tilt-dev/tap/ctlptl
+  - btop
+
+# Cargo packages (cross-platform); binary name is used as the idempotency guard.
+cargo_packages:
+  - { package: "watchexec-cli", binary: "watchexec" }
+  - { package: "tree-sitter-cli", binary: "tree-sitter" }
+  - { package: "du-dust", binary: "dust" }
+  - { package: "bottom", binary: "btm" }
+  - { package: "cargo-updater", binary: "cargo-updater" }
+  - { package: "bat", binary: "bat" }
+  - { package: "exa", binary: "exa" }
+
+# Curated macOS GUI apps (Homebrew casks) standing in for the Linux desktop-ext
+# apt/snap apps. Chrome, Cursor and Docker are handled by their own playbooks.
+mac_casks:
+  - visual-studio-code
+  - spotify
+  - firefox
+  - alacritty
+  - keepassxc
+  - meld
+
+# Cursor "User" settings directory differs by platform (used by files.yml).
+cursor_user_dir: "{{ '~/Library/Application Support/Cursor/User/' if is_macos else '~/.config/Cursor/User/' }}"

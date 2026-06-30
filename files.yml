@@ -12,7 +12,7 @@
       - src: "files/.p10k.zsh"
         dest: "~/"
       - src: "files/settings.json"
-        dest: "~/.config/Cursor/User/"
+        dest: "{{ cursor_user_dir }}"
   tasks:
 
     - name: Copy files if they don't exist

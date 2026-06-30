@@ -1,5 +1,6 @@
-- name: Set up local Ubuntu machine
+- name: Bootstrap - gather facts for OS detection
   hosts: localhost
+  gather_facts: true
 
 - name: Install oh-my-zsh
   ansible.builtin.import_playbook: omzsh.yml
@@ -24,10 +25,12 @@
 - name: Install Nix
   ansible.builtin.import_playbook: nix.yml
   tags: slow, minimal
+  when: ansible_system == "Linux"
 
 - name: Install Devbox
   ansible.builtin.import_playbook: devbox.yml
   tags: slow, minimal
+  when: ansible_system == "Linux"
 
 - name: Install Rust
   ansible.builtin.import_playbook: rust.yml
@@ -40,6 +43,7 @@
 - name: Install base packages desktop
   ansible.builtin.import_playbook: packages-desktop.yml
   tags: fast, minimal
+  when: ansible_system == "Linux"
 
 - name: Install nerd-fonts
   ansible.builtin.import_playbook: nerdfonts.yml
@@ -108,3 +112,4 @@
 - name: Load gnome settings
   ansible.builtin.import_playbook: gnome_config.yml
   tags: fast
+  when: ansible_system == "Linux"

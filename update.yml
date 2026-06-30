@@ -10,6 +10,7 @@
         autoremove: true
         autoclean: true
         state: latest
+      when: ansible_system == "Linux"
       tags: [print_action]
 
     - name: Update snap packages
@@ -18,6 +19,7 @@
         snap refresh
       changed_when: false
       failed_when: false
+      when: ansible_system == "Linux"
 
     - name: Update homebrew packages # noqa: package-latest
       community.general.homebrew:
@@ -27,6 +29,6 @@
 
     - name: Update cargo packages # noqa: package-latest
       ansible.builtin.command:
-        cmd: /home/{{ ansible_user_id }}/.cargo/bin/cargo updater -u
+        cmd: "{{ ansible_env.HOME }}/.cargo/bin/cargo updater -u"
       changed_when: false
       failed_when: false
