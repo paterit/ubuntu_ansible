@@ -18,9 +18,9 @@
   ansible.builtin.import_playbook: files.yml
   tags: fast, minimal, server
 
-- name: Install cheat
-  ansible.builtin.import_playbook: cheat.yml
-  tags: fast, minimal, server
+#- name: Install cheat
+#  ansible.builtin.import_playbook: cheat.yml
+#  tags: fast, minimal, server
 
 - name: Install Nix
   ansible.builtin.import_playbook: nix.yml
