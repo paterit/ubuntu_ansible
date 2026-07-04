@@ -47,7 +47,7 @@ ext_server_brew_packages:
   - ripgrep
   - just
   - kubectl
-  - tilt-dev/tap/ctlptl
+  - font-hack-nerd-font
   - btop
 
 # Cargo packages (cross-platform); binary name is used as the idempotency guard.
