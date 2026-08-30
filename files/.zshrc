@@ -91,7 +91,14 @@ plugins=(
 
 )
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Load Homebrew from wherever it is installed (Apple Silicon, Intel mac, or Linuxbrew)
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
@@ -130,11 +137,6 @@ lgit () {
 }
 
 mkcd () {
-	mkdir -p -- "$1" &&
-	cd -P -- "$1"
-}
-
-mdcd () {
 	mkdir -p -- "$1" &&
 	cd -P -- "$1"
 }

@@ -5,35 +5,44 @@
     cursor_url: "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/x64/Cursor-0.49.6-x86_64.AppImage"
 
   tasks:
-    - name: Create folder for Cursor in ~/apps
-      ansible.builtin.file:
-        path: "~/apps/cursor"
-        state: directory
-        mode: "0755"
+    - name: Install Cursor via cask (macOS)
+      community.general.homebrew_cask:
+        name: cursor
+        state: present
+      when: ansible_system == "Darwin"
 
-    - name: Download Cursor
-      ansible.builtin.get_url:
-        url: "{{ cursor_url }}"
-        dest: "~/apps/cursor/"
-        mode: "0764"
-      register: download_result
+    - name: Install Cursor as AppImage (Linux)
+      when: ansible_system == "Linux"
+      block:
+        - name: Create folder for Cursor in ~/apps
+          ansible.builtin.file:
+            path: "~/apps/cursor"
+            state: directory
+            mode: "0755"
 
-    - name: Create symlink to Cursor
-      ansible.builtin.file:
-        src: "{{ download_result.dest }}"
-        dest: "~/bin/cursor"
-        force: true
-        state: link
-        mode: "0764"
+        - name: Download Cursor
+          ansible.builtin.get_url:
+            url: "{{ cursor_url }}"
+            dest: "~/apps/cursor/"
+            mode: "0764"
+          register: download_result
 
-    - name: Copy apparmor config file to enable save Cursor runs
-      become: true
-      ansible.builtin.copy:
-        src: "files/cursor-appimage"
-        dest: "/etc/apparmor.d/"
-        mode: "0644"
-      notify:
-        - Reload AppArmor
+        - name: Create symlink to Cursor
+          ansible.builtin.file:
+            src: "{{ download_result.dest }}"
+            dest: "~/bin/cursor"
+            force: true
+            state: link
+            mode: "0764"
+
+        - name: Copy apparmor config file to enable save Cursor runs
+          become: true
+          ansible.builtin.copy:
+            src: "files/cursor-appimage"
+            dest: "/etc/apparmor.d/"
+            mode: "0644"
+          notify:
+            - Reload AppArmor
 
   handlers:
     - name: Reload AppArmor

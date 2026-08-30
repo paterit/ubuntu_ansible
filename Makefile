@@ -1,7 +1,11 @@
-.PHONY: help mount new_instance install_ansible clean secrets full_test_no_secrets 
+.PHONY: help mount new_instance install_ansible clean secrets full_test_no_secrets
 .PHONY: full_test fast_test_no_secrets fast_test minimal_test_no_secrets minimal_test test clean_install_ansible
+.PHONY: setup syntax_check lint
 
 instance_name = ltsAnsible
+
+# Playbooks checked by syntax_check / lint
+playbooks = main.yml main-after-secrets.yml update.yml
 
 mount:
 	-@multipass mount . $(instance_name):/home/ubuntu/ubuntu_ansible
@@ -75,6 +79,18 @@ debug:
 setup_python:
 	uv venv --python=python3.12
 	uv add ansible ansible-lint ansible-lint-galaxy
+
+# Create the local venv and install the required Galaxy collections.
+setup: setup_python
+	uv run ansible-galaxy collection install -r requirements.yml
+
+# Parse + import-validate every entry playbook (works on macOS and Linux).
+syntax_check:
+	uv run ansible-playbook --syntax-check $(playbooks)
+
+# Lint all playbooks.
+lint:
+	uv run ansible-lint
 
 dump_gnome_settings:
 	@mkdir -p files/gnome

@@ -3,39 +3,44 @@
   become: false
 
   tasks:
-    - name: Install podman
-      ansible.builtin.apt:
-        name: podman
+    - name: Install minikube and podman via brew (macOS)
+      community.general.homebrew:
+        name:
+          - minikube
+          - podman
         state: present
-      become: true
+      when: ansible_system == "Darwin"
 
-    - name: Check if minikube binary is installed
-      ansible.builtin.stat:
-        path: /usr/bin/minikube
-      register: minikube_binary_installed
-
-    - name: Install minikube
-      when: not minikube_binary_installed.stat.exists
+    - name: Install minikube and podman (Linux)
+      when: ansible_system == "Linux"
       block:
+        - name: Install podman
+          become: true
+          ansible.builtin.apt:
+            name: podman
+            state: present
+
+        - name: Check if minikube binary is installed
+          ansible.builtin.stat:
+            path: /usr/bin/minikube
+          register: minikube_binary_installed
 
         - name: Install minikube
+          when: not minikube_binary_installed.stat.exists
+          become: true
           ansible.builtin.apt:
             deb: https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
             state: present
             update_cache: true
-          become: true
 
-        - name: Add minikube completion to zsh
-          ansible.builtin.lineinfile:
-            path: "{{ ansible_env.HOME }}/.zshrc"
-            line: "source <(minikube completion zsh)"
-            state: present
+    - name: Add minikube completion to zsh
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: "source <(minikube completion zsh)"
+        state: present
 
-    - name: Install kubectl auto-completion
-      # kubectl is in server-ext brew packages
-      block:
-        - name: Add kubectl auto-completion to zsh
-          ansible.builtin.lineinfile:
-            path: "{{ ansible_env.HOME }}/.zshrc"
-            line: "source <(kubectl completion zsh)"
-            state: present
+    - name: Add kubectl auto-completion to zsh
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: "source <(kubectl completion zsh)"
+        state: present

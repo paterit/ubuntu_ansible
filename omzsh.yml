@@ -1,21 +1,24 @@
-- name: Install Oh My ZSH and make it default shell on Ubuntu
+- name: Install Oh My ZSH and make it the default shell
   hosts: localhost
 
   tasks:
+    # On macOS zsh is the built-in default shell and git ships with the
+    # Command Line Tools / Homebrew bootstrap, so these are Linux-only.
     - name: Install zsh packages
       become: true
       ansible.builtin.apt:
-        name: "{{ item }}"
+        name:
+          - git
+          - zsh
         state: present
-      loop:
-        - git
-        - zsh
+      when: ansible_system == "Linux"
 
     - name: Change user shell to zsh
       become: true
       ansible.builtin.user:
         name: "{{ ansible_user_id }}"
         shell: /usr/bin/zsh
+      when: ansible_system == "Linux"
 
     - name: Install Oh My Zsh # noqa: latest
       ansible.builtin.git:
@@ -45,10 +48,9 @@
         depth: 1
         update: false
 
-    - name: Install powerlevel10k theme
+    - name: Install powerlevel10k theme # noqa: latest
       ansible.builtin.git:
         repo: https://github.com/romkatv/powerlevel10k.git
         dest: ~/.oh-my-zsh/custom/themes/powerlevel10k
         depth: 1
         update: false
-        

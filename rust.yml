@@ -10,14 +10,16 @@
     - name: Install Rust
       when: not rustup_installed.stat.exists
       block:
-        - name: Install Rust dependencies
+        # macOS builds with the clang toolchain from the Command Line Tools and
+        # ships curl, so the apt build deps are Linux-only.
+        - name: Install Rust dependencies (Linux)
           become: true
           ansible.builtin.apt:
-            name: "{{ item }}"
+            name:
+              - curl
+              - build-essential
             state: present
-          loop:
-            - curl
-            - build-essential
+          when: ansible_system == "Linux"
 
         - name: Download install script
           ansible.builtin.get_url:

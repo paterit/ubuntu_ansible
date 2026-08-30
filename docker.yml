@@ -1,61 +1,65 @@
 - name: Install Docker
   hosts: localhost
-  become: false # This is required to have in ansible_user_id not a root
+  become: false  # keep ansible_user_id as the normal user, not root
 
   tasks:
-    - name: Install required system packages # noqa: package-latest
-      become: true
-      ansible.builtin.apt:
-        pkg: "{{ item }}"
-        state: latest
-        update_cache: true
-      loop:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg
-        - software-properties-common
-        - python3-pip
-        - virtualenv
-        - python3-setuptools
-
-    - name: Add Docker GPG apt Key
-      become: true
-      ansible.builtin.apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      become: true
-      ansible.builtin.apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
-        state: present
-
-    - name: Install docker-ce # noqa: package-latest
-      become: true
-      ansible.builtin.apt:
-        name: docker-ce
-        state: latest
-
-    - name: Install Docker Module for Python # noqa: package-latest
-      become: true
-      ansible.builtin.apt:
-        pkg: python3-docker
-        state: latest
-
-    - name: Add docker group
-      become: true
-      ansible.builtin.group:
+    - name: Install Docker Desktop via cask (macOS)
+      community.general.homebrew_cask:
         name: docker
         state: present
+      when: ansible_system == "Darwin"
 
-    - name: Debug
-      ansible.builtin.debug:
-        msg: "Adding {{ ansible_user_id }} to docker group"
+    - name: Install Docker Engine (Linux)
+      when: ansible_system == "Linux"
+      block:
+        - name: Install required system packages # noqa: package-latest
+          become: true
+          ansible.builtin.apt:
+            pkg:
+              - apt-transport-https
+              - ca-certificates
+              - curl
+              - gnupg
+              - software-properties-common
+              - python3-pip
+              - virtualenv
+              - python3-setuptools
+            state: latest
+            update_cache: true
 
-    - name: Add user to docker group
-      become: true
-      ansible.builtin.user:
-        name: "{{ ansible_user_id }}"
-        groups: docker
-        append: true
+        - name: Add Docker GPG apt Key
+          become: true
+          ansible.builtin.apt_key:
+            url: https://download.docker.com/linux/ubuntu/gpg
+            state: present
+
+        - name: Add Docker Repository
+          become: true
+          ansible.builtin.apt_repository:
+            repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+            state: present
+
+        - name: Install docker-ce # noqa: package-latest
+          become: true
+          ansible.builtin.apt:
+            name: docker-ce
+            state: latest
+
+        - name: Install Docker Module for Python # noqa: package-latest
+          become: true
+          ansible.builtin.apt:
+            pkg: python3-docker
+            state: latest
+
+        - name: Add docker group
+          become: true
+          ansible.builtin.group:
+            name: docker
+            state: present
+
+        - name: Add user to docker group
+          become: true
+          ansible.builtin.user:
+            name: "{{ ansible_user_id }}"
+            groups: docker
+            append: true

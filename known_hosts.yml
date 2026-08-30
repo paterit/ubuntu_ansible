@@ -2,11 +2,18 @@
   hosts: localhost
 
   tasks:
-    - name: Install dependencies - knownhosts
-      ansible.builtin.package:
+    - name: Install dependencies - knownhosts (apt, Linux)
+      become: true
+      ansible.builtin.apt:
         name: jq
         state: present
-      become: true
+      when: ansible_system == "Linux"
+
+    - name: Install dependencies - knownhosts (brew, macOS)
+      community.general.homebrew:
+        name: jq
+        state: present
+      when: ansible_system == "Darwin"
 
     - name: Check if knownhosts file exists
       ansible.builtin.stat:

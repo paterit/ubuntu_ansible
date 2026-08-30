@@ -1,53 +1,71 @@
-- name: Install brew on Ubuntu
+- name: Install Homebrew
   hosts: localhost
 
   vars:
-    linuxbrew_install_tmp: "/tmp/brewinstall"
-    linuxbrew_install_url: "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
+    brew_install_tmp: "/tmp/brewinstall"
+    brew_install_url: "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
 
   tasks:
+    - name: Check Xcode Command Line Tools are present (macOS)
+      when: ansible_system == "Darwin"
+      block:
+        - name: Detect Xcode Command Line Tools
+          ansible.builtin.command: xcode-select -p
+          register: xcode_clt
+          changed_when: false
+          failed_when: false
+
+        - name: Require Xcode Command Line Tools
+          ansible.builtin.assert:
+            that: xcode_clt.rc == 0
+            fail_msg: >-
+              Xcode Command Line Tools are required. Install them with
+              'xcode-select --install' and re-run.
+
     - name: Check if brew is installed
       ansible.builtin.stat:
-        path: "/home/linuxbrew/.linuxbrew/bin/brew"
+        path: "{{ brew_bin }}"
       register: brew_installed
 
     - name: Install brew
       when: not brew_installed.stat.exists
       block:
 
-        - name: Install brew dependencies
+        - name: Install brew build dependencies (Linux)
           become: true
-          ansible.builtin.package:
-            name: "{{ item }}"
+          ansible.builtin.apt:
+            name:
+              - build-essential
+              - curl
+              - git
+              - gcc
             state: present
-          loop:
-            - build-essential
-            - curl
-            - git
-            - gcc
+          when: ansible_system == "Linux"
 
         - name: Temporary directory
           ansible.builtin.file:
-            path: "{{ linuxbrew_install_tmp }}"
+            path: "{{ brew_install_tmp }}"
             state: directory
             mode: "0700"
           become: false
 
         - name: Download Homebrew install script
           ansible.builtin.get_url:
-            url: "{{ linuxbrew_install_url }}"
-            dest: "{{ linuxbrew_install_tmp }}/install.sh"
+            url: "{{ brew_install_url }}"
+            dest: "{{ brew_install_tmp }}/install.sh"
             mode: "0700"
           become: false
 
         - name: Install Homebrew with the installer
-          ansible.builtin.command: sh -c "{{ linuxbrew_install_tmp }}/install.sh"
+          ansible.builtin.command: sh -c "{{ brew_install_tmp }}/install.sh"
+          environment:
+            NONINTERACTIVE: "1"
           register: install_result
           changed_when: "install_result.rc == 0"
           become: false
 
         - name: Remove temporary directory
           ansible.builtin.file:
-            path: "{{ linuxbrew_install_tmp }}"
+            path: "{{ brew_install_tmp }}"
             state: absent
           become: false

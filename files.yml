@@ -12,7 +12,7 @@
       - src: "files/.p10k.zsh"
         dest: "~/"
       - src: "files/settings.json"
-        dest: "~/.config/Cursor/User/"
+        dest: "{{ cursor_user_dir }}"
   tasks:
 
     - name: Copy files if they don't exist
@@ -20,7 +20,7 @@
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
         owner: "{{ ansible_user_id }}"
-        group: "{{ ansible_user_id }}"
+        group: "{{ 'staff' if is_macos else ansible_user_id }}"
         mode: "0644"
         force: false
       loop: "{{ files }}"

@@ -8,8 +8,8 @@
         name: "update_yml"
         hour: "*/8"
         job: >
-          ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v /home/{{ ansible_user_id }}/ubuntu_ansible/update.yml >>
-          /home/{{ ansible_user_id }}/.local/logs/ansible/update.log 2>&1
+          ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook -v {{ ansible_env.HOME }}/ubuntu_ansible/update.yml >>
+          {{ ansible_env.HOME }}/.local/logs/ansible/update.log 2>&1
         user: "{{ ansible_user_id }}"
         cron_file: "packages_update_yml"
         state: present
